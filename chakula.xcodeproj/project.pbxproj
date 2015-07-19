@@ -8,11 +8,17 @@
 
 /* Begin PBXBuildFile section */
 		038A6CA91B521889004A0034 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038A6CA81B521889004A0034 /* AppDelegate.swift */; };
-		038A6CAB1B521889004A0034 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038A6CAA1B521889004A0034 /* ViewController.swift */; };
+		038A6CAB1B521889004A0034 /* FoodFeedController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038A6CAA1B521889004A0034 /* FoodFeedController.swift */; };
 		038A6CAE1B521889004A0034 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 038A6CAC1B521889004A0034 /* Main.storyboard */; };
 		038A6CB01B521889004A0034 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 038A6CAF1B521889004A0034 /* Images.xcassets */; };
 		038A6CB31B521889004A0034 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 038A6CB11B521889004A0034 /* LaunchScreen.xib */; };
 		038A6CBF1B521889004A0034 /* chakulaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038A6CBE1B521889004A0034 /* chakulaTests.swift */; };
+		038A6CC91B53571E004A0034 /* APIController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038A6CC81B53571D004A0034 /* APIController.swift */; };
+		038A6CCB1B53920E004A0034 /* pacman.png in Resources */ = {isa = PBXBuildFile; fileRef = 038A6CCA1B53920E004A0034 /* pacman.png */; };
+		038A6CCD1B53992E004A0034 /* foodItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038A6CCC1B53992E004A0034 /* foodItem.swift */; };
+		038A6CCF1B548237004A0034 /* truck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038A6CCE1B548237004A0034 /* truck.swift */; };
+		038A6CD11B54ABF6004A0034 /* orderController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038A6CD01B54ABF6004A0034 /* orderController.swift */; };
+		038A6CD31B54E2E4004A0034 /* FoodFeedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038A6CD21B54E2E4004A0034 /* FoodFeedCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,13 +35,19 @@
 		038A6CA31B521889004A0034 /* chakula.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = chakula.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		038A6CA71B521889004A0034 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		038A6CA81B521889004A0034 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		038A6CAA1B521889004A0034 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		038A6CAA1B521889004A0034 /* FoodFeedController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodFeedController.swift; sourceTree = "<group>"; };
 		038A6CAD1B521889004A0034 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		038A6CAF1B521889004A0034 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		038A6CB21B521889004A0034 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		038A6CB81B521889004A0034 /* chakulaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = chakulaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		038A6CBD1B521889004A0034 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		038A6CBE1B521889004A0034 /* chakulaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = chakulaTests.swift; sourceTree = "<group>"; };
+		038A6CC81B53571D004A0034 /* APIController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIController.swift; sourceTree = "<group>"; };
+		038A6CCA1B53920E004A0034 /* pacman.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pacman.png; sourceTree = "<group>"; };
+		038A6CCC1B53992E004A0034 /* foodItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = foodItem.swift; sourceTree = "<group>"; };
+		038A6CCE1B548237004A0034 /* truck.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = truck.swift; sourceTree = "<group>"; };
+		038A6CD01B54ABF6004A0034 /* orderController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = orderController.swift; sourceTree = "<group>"; };
+		038A6CD21B54E2E4004A0034 /* FoodFeedCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoodFeedCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,11 +90,16 @@
 			isa = PBXGroup;
 			children = (
 				038A6CA81B521889004A0034 /* AppDelegate.swift */,
-				038A6CAA1B521889004A0034 /* ViewController.swift */,
+				038A6CAA1B521889004A0034 /* FoodFeedController.swift */,
+				038A6CCC1B53992E004A0034 /* foodItem.swift */,
+				038A6CC81B53571D004A0034 /* APIController.swift */,
+				038A6CCE1B548237004A0034 /* truck.swift */,
+				038A6CD01B54ABF6004A0034 /* orderController.swift */,
 				038A6CAC1B521889004A0034 /* Main.storyboard */,
 				038A6CAF1B521889004A0034 /* Images.xcassets */,
 				038A6CB11B521889004A0034 /* LaunchScreen.xib */,
 				038A6CA61B521889004A0034 /* Supporting Files */,
+				038A6CD21B54E2E4004A0034 /* FoodFeedCell.swift */,
 			);
 			path = chakula;
 			sourceTree = "<group>";
@@ -90,6 +107,7 @@
 		038A6CA61B521889004A0034 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				038A6CCA1B53920E004A0034 /* pacman.png */,
 				038A6CA71B521889004A0034 /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -193,6 +211,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				038A6CAE1B521889004A0034 /* Main.storyboard in Resources */,
+				038A6CCB1B53920E004A0034 /* pacman.png in Resources */,
 				038A6CB31B521889004A0034 /* LaunchScreen.xib in Resources */,
 				038A6CB01B521889004A0034 /* Images.xcassets in Resources */,
 			);
@@ -212,8 +231,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				038A6CAB1B521889004A0034 /* ViewController.swift in Sources */,
+				038A6CAB1B521889004A0034 /* FoodFeedController.swift in Sources */,
+				038A6CCF1B548237004A0034 /* truck.swift in Sources */,
+				038A6CD11B54ABF6004A0034 /* orderController.swift in Sources */,
+				038A6CCD1B53992E004A0034 /* foodItem.swift in Sources */,
 				038A6CA91B521889004A0034 /* AppDelegate.swift in Sources */,
+				038A6CD31B54E2E4004A0034 /* FoodFeedCell.swift in Sources */,
+				038A6CC91B53571E004A0034 /* APIController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -343,6 +367,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = chakula/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -353,6 +378,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = chakula/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -411,6 +437,7 @@
 				038A6CC41B521889004A0034 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		038A6CC51B521889004A0034 /* Build configuration list for PBXNativeTarget "chakulaTests" */ = {
 			isa = XCConfigurationList;
@@ -419,6 +446,7 @@
 				038A6CC71B521889004A0034 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
