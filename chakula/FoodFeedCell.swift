@@ -11,7 +11,6 @@ import UIKit
 class FoodFeedCell: UITableViewCell {
     @IBOutlet weak var truckName: UILabel!
     @IBOutlet weak var foodTitle: UILabel!
-    @IBOutlet weak var foodDescription: UILabel!
     @IBOutlet weak var distance: UILabel!
     @IBOutlet weak var pickupRange: UILabel!
     @IBOutlet weak var foodPrice: UILabel!

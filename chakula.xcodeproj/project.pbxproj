@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0315D7A91B5CB53500656F85 /* RadioOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0315D7A81B5CB53500656F85 /* RadioOption.swift */; };
 		038A6CA91B521889004A0034 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038A6CA81B521889004A0034 /* AppDelegate.swift */; };
 		038A6CAB1B521889004A0034 /* FoodFeedController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038A6CAA1B521889004A0034 /* FoodFeedController.swift */; };
 		038A6CAE1B521889004A0034 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 038A6CAC1B521889004A0034 /* Main.storyboard */; };
@@ -19,6 +20,11 @@
 		038A6CCF1B548237004A0034 /* truck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038A6CCE1B548237004A0034 /* truck.swift */; };
 		038A6CD11B54ABF6004A0034 /* orderController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038A6CD01B54ABF6004A0034 /* orderController.swift */; };
 		038A6CD31B54E2E4004A0034 /* FoodFeedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038A6CD21B54E2E4004A0034 /* FoodFeedCell.swift */; };
+		03BD58691B5DD53900110205 /* SSRadioButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BD58681B5DD53900110205 /* SSRadioButton.swift */; };
+		03BD586B1B5DD5EE00110205 /* SSRadioButtonController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BD586A1B5DD5EE00110205 /* SSRadioButtonController.swift */; };
+		03BD586E1B5F043800110205 /* checked.png in Resources */ = {isa = PBXBuildFile; fileRef = 03BD586C1B5F043800110205 /* checked.png */; };
+		03BD586F1B5F043800110205 /* unchecked.png in Resources */ = {isa = PBXBuildFile; fileRef = 03BD586D1B5F043800110205 /* unchecked.png */; };
+		03BD58711B5F079C00110205 /* CheckBoxLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BD58701B5F079C00110205 /* CheckBoxLabel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,6 +38,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0315D7A81B5CB53500656F85 /* RadioOption.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadioOption.swift; sourceTree = "<group>"; };
 		038A6CA31B521889004A0034 /* chakula.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = chakula.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		038A6CA71B521889004A0034 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		038A6CA81B521889004A0034 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -48,6 +55,11 @@
 		038A6CCE1B548237004A0034 /* truck.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = truck.swift; sourceTree = "<group>"; };
 		038A6CD01B54ABF6004A0034 /* orderController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = orderController.swift; sourceTree = "<group>"; };
 		038A6CD21B54E2E4004A0034 /* FoodFeedCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoodFeedCell.swift; sourceTree = "<group>"; };
+		03BD58681B5DD53900110205 /* SSRadioButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSRadioButton.swift; sourceTree = "<group>"; };
+		03BD586A1B5DD5EE00110205 /* SSRadioButtonController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSRadioButtonController.swift; sourceTree = "<group>"; };
+		03BD586C1B5F043800110205 /* checked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checked.png; sourceTree = "<group>"; };
+		03BD586D1B5F043800110205 /* unchecked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = unchecked.png; sourceTree = "<group>"; };
+		03BD58701B5F079C00110205 /* CheckBoxLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckBoxLabel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,14 +104,18 @@
 				038A6CA81B521889004A0034 /* AppDelegate.swift */,
 				038A6CAA1B521889004A0034 /* FoodFeedController.swift */,
 				038A6CCC1B53992E004A0034 /* foodItem.swift */,
+				0315D7A81B5CB53500656F85 /* RadioOption.swift */,
 				038A6CC81B53571D004A0034 /* APIController.swift */,
 				038A6CCE1B548237004A0034 /* truck.swift */,
 				038A6CD01B54ABF6004A0034 /* orderController.swift */,
+				03BD58701B5F079C00110205 /* CheckBoxLabel.swift */,
 				038A6CAC1B521889004A0034 /* Main.storyboard */,
 				038A6CAF1B521889004A0034 /* Images.xcassets */,
 				038A6CB11B521889004A0034 /* LaunchScreen.xib */,
 				038A6CA61B521889004A0034 /* Supporting Files */,
 				038A6CD21B54E2E4004A0034 /* FoodFeedCell.swift */,
+				03BD58681B5DD53900110205 /* SSRadioButton.swift */,
+				03BD586A1B5DD5EE00110205 /* SSRadioButtonController.swift */,
 			);
 			path = chakula;
 			sourceTree = "<group>";
@@ -107,6 +123,8 @@
 		038A6CA61B521889004A0034 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				03BD586C1B5F043800110205 /* checked.png */,
+				03BD586D1B5F043800110205 /* unchecked.png */,
 				038A6CCA1B53920E004A0034 /* pacman.png */,
 				038A6CA71B521889004A0034 /* Info.plist */,
 			);
@@ -174,6 +192,7 @@
 		038A6C9B1B521889004A0034 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0640;
 				ORGANIZATIONNAME = org.rhye;
 				TargetAttributes = {
@@ -210,9 +229,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				03BD586E1B5F043800110205 /* checked.png in Resources */,
 				038A6CAE1B521889004A0034 /* Main.storyboard in Resources */,
 				038A6CCB1B53920E004A0034 /* pacman.png in Resources */,
 				038A6CB31B521889004A0034 /* LaunchScreen.xib in Resources */,
+				03BD586F1B5F043800110205 /* unchecked.png in Resources */,
 				038A6CB01B521889004A0034 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -234,7 +255,11 @@
 				038A6CAB1B521889004A0034 /* FoodFeedController.swift in Sources */,
 				038A6CCF1B548237004A0034 /* truck.swift in Sources */,
 				038A6CD11B54ABF6004A0034 /* orderController.swift in Sources */,
+				03BD58711B5F079C00110205 /* CheckBoxLabel.swift in Sources */,
 				038A6CCD1B53992E004A0034 /* foodItem.swift in Sources */,
+				0315D7A91B5CB53500656F85 /* RadioOption.swift in Sources */,
+				03BD586B1B5DD5EE00110205 /* SSRadioButtonController.swift in Sources */,
+				03BD58691B5DD53900110205 /* SSRadioButton.swift in Sources */,
 				038A6CA91B521889004A0034 /* AppDelegate.swift in Sources */,
 				038A6CD31B54E2E4004A0034 /* FoodFeedCell.swift in Sources */,
 				038A6CC91B53571E004A0034 /* APIController.swift in Sources */,

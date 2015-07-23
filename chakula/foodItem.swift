@@ -14,12 +14,22 @@ struct FoodItem {
     let imgURL: String?
     let price: Double?
     let truck: Truck?
-    
-    init(name: String?, description: String?, imgURL: String?, price: Double?, truck: Truck?){
+    var radioOptions: [RadioOption]
+    var toggleOptions: [(name: String, priceDiff: Double, id: Int)]
+
+    // list options
+    // toggle options
+    init(name: String?, description: String?, imgURL: String?,
+        price: Double?, truck: Truck?, radioOptions: [RadioOption],
+        toggleOptions: [(name: String, priceDiff: Double, id: Int)]){
         self.name = name
         self.description = description
         self.imgURL = imgURL
         self.price = price
         self.truck = truck
+        self.radioOptions = radioOptions
+        self.toggleOptions = toggleOptions
+        println("Radios: \(radioOptions)")
+        println("Toggles: \(toggleOptions)")
     }
 }

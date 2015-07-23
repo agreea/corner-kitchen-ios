@@ -10,9 +10,19 @@ import UIKit
 import CoreLocation
 
 class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDelegate, APIControllerProtocol, CLLocationManagerDelegate {
-
+    // TODO: figure out flow based off of location availability
+    /*
+        open app
+        try to get location
+        if you don't have location, load the last known location (?)
+        if you don't have the last known location, show an error message (?)
+    */
     var manager: CLLocationManager!
 
+    @IBOutlet weak var registerLogin: UIView!
+    @IBOutlet weak var password: UITextField!
+    @IBOutlet weak var phoneNumber: UITextField!
+    
     var foodItems = [FoodItem]()
     let kCellIdentifier: String = "foodCell"
     var api : APIController!
@@ -23,6 +33,8 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        phoneNumber.placeholder = "Phone # (just digits)"
+        password.placeholder = "Password"
         outputFormatter.dateFormat = "hh':'mm"
         outputFormatter.locale = NSLocale(localeIdentifier: "en_US")
         api = APIController(delegate: self)
@@ -35,11 +47,23 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
         api.findFood()
     }
     
+    override func viewDidLayoutSubviews(){
+        super.viewDidLayoutSubviews()
+        for cell in self.foodList.visibleCells() as! [FoodFeedCell] {
+            cell.truckName.sizeToFit()
+            let oldFrame = cell.truckName.frame
+            let newWidth = oldFrame.size.width + 40
+            let newOrigin = CGPoint(x: oldFrame.origin.x + 40, y: oldFrame.origin.y)
+            var newSize = CGSize(width: newWidth,height: cell.truckName.frame.size.height)
+            cell.truckName.sizeToFit()
+            // TODO: Get frame right
+//            cell.truckName.frame = CGRect(origin: newOrigin, size: newSize)
+        }
+    }
+    
     func locationManager(manager: CLLocationManager!,
         didUpdateLocations locations: [AnyObject]!){
         let location = locations.last as! CLLocation
-        println("Lat: \(location.coordinate.latitude)")
-        println("Lon: \(location.coordinate.longitude)")
     }
     
     override func didReceiveMemoryWarning() {
@@ -52,9 +76,28 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
     func didReceiveAPIResults(results: [FoodItem]) {
         dispatch_async(dispatch_get_main_queue(), {
             self.foodItems = results
-            self.foodList!.reloadData()
+            if(self.foodItems.count == 0) {
+            } else {
+                self.foodList!.reloadData()
+            }
             UIApplication.sharedApplication().networkActivityIndicatorVisible = false
         })
+    }
+    
+    func queryFailed(){
+        dispatch_async(dispatch_get_main_queue(), {
+                // TODO: Show error message on feed
+            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            self.setFeedMessage("No network connection :(")
+        })
+    }
+    
+    func setFeedMessage(message: String){
+        let messageLabel = UILabel(frame: CGRectMake(0, 0, self.foodList.bounds.size.width, self.foodList.bounds.size.height))
+        messageLabel.text = message
+        messageLabel.sizeToFit()
+        self.foodList.backgroundView = messageLabel
+        self.foodList.separatorStyle = UITableViewCellSeparatorStyle.None
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -78,6 +121,7 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
                         if let cellToUpdate = tableView.cellForRowAtIndexPath(indexPath) as? FoodFeedCell {
                             println("Got 'Cell to update!'")
                                 cellToUpdate.foodImage!.image = image
+                                cellToUpdate.truckName?.sizeToFit()
                             }
                         })
                     } else {
@@ -92,10 +136,10 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
         let cell: FoodFeedCell = tableView.dequeueReusableCellWithIdentifier(kCellIdentifier) as! FoodFeedCell
         let foodItem = self.foodItems[indexPath.row]
         cell.foodTitle?.text = foodItem.name!
-        cell.foodDescription?.text = foodItem.description!        
         cell.foodPrice?.text = "$\(foodItem.price!)"
         cell.foodImage?.image = UIImage(named: "pacman.png")
-        cell.truckName.text = foodItem.truck!.name
+        cell.truckName?.text = foodItem.truck!.name
+        cell.truckName?.sizeToFit()
         cell.distance?.text = "\(foodItem.truck!.dist)mi"
         
         let openString = outputFormatter.stringFromDate(foodItem.truck!.open)
@@ -104,6 +148,13 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
         cell.pickupRange?.text = "\(openString) - \(closeString)"
         return (cell, foodItem.imgURL!)
     }
+    
+    override func shouldPerformSegueWithIdentifier(identifier: String?, sender: AnyObject?) -> Bool{
+        println("Called shouldPerformSegue!")
+        registerLogin.hidden = false
+        return false
+    }
+
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         println("Segue coming!")
