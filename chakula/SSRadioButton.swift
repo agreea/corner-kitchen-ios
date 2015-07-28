@@ -72,6 +72,7 @@ class SSRadioButton: UIButton {
         layer.addSublayer(fillCircleLayer)
         self.titleEdgeInsets = UIEdgeInsetsMake(0, (4*circleRadius + 4*circleLayer.lineWidth), 0, 0)
         self.toggleButon()
+        self.titleLabel!.textColor = UIColor.blackColor()
     }
     /**
     Toggles selected state of the button.

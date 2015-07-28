@@ -28,8 +28,12 @@ class CheckBoxLabel: UIButton {
     override init(frame: CGRect){
         super.init(frame: frame)
         self.setImage(uncheckedImage, forState: .Normal)
+        self.imageView!.contentMode = UIViewContentMode.ScaleAspectFit
+        let origin = self.imageView!.frame.origin
+        self.imageView!.frame = CGRectMake(origin.x, origin.y, 20, 20)
         self.addTarget(self, action: "buttonClicked:", forControlEvents: UIControlEvents.TouchUpInside)
         self.isChecked = false
+        self.titleLabel!.textColor = UIColor.blackColor()
     }
     
     func buttonClicked(sender: UIButton){

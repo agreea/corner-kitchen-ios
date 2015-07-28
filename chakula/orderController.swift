@@ -32,13 +32,14 @@ class OrderController: UIViewController {
             orderTitle.text = foodItem!.name!
             descriptionLabel?.text = foodItem!.description
             self.nextViewOrigin = CGPoint(x: quantLabel.frame.minX,
-                                     y: quantLabel.frame.maxY + 6)
-//             TODO: make scrollview
-//            self.scrollView.setContentOffset(CGPointMake(0, self.scrollView.contentOffset.y))
+                                     y: quantLabel.frame.maxY + 60)
+            print("Next view origin after quant: \(nextViewOrigin)")
             buildRadioOptions()
             buildToggles()
             buildPickup()
             buildOrderButton()
+//             TODO: make scrollview
+//            self.scrollView.setContentOffset(CGPointMake(0, self.scrollView.contentOffset.y))
         }
     }
     
@@ -50,9 +51,8 @@ class OrderController: UIViewController {
         scrollViewInsets.bottom = scrollViewBounds.size.height/2.0
         scrollViewInsets.bottom -= contentView.bounds.size.height/2.0;
         scrollViewInsets.bottom += 1
-        
         scrollView.contentInset = scrollViewInsets
-
+        scrollView.frame = CGRectMake(self.scrollView.frame.origin.x, self.scrollView.frame.origin.y, scrollView.frame.width, scrollView.frame.height - 30)
     }
     private func addViewToBottom(view: UIView){
         self.scrollView.addSubview(view)
@@ -70,7 +70,9 @@ class OrderController: UIViewController {
     private func buildRadioOptions(){
         if(foodItem?.radioOptions != nil){
             for radioOption in foodItem!.radioOptions {
+                print(radioOption.familyName)
                 buildSectionLabel(radioOption.familyName)
+                print("NVO after Radio Title: \(nextViewOrigin)")
                 buildRadioChoices(radioOption)
             }
         }
@@ -78,13 +80,14 @@ class OrderController: UIViewController {
     
     private func buildRadioChoices(radioOption: RadioOption){
         for choice in radioOption.choices {
-            var (name, priceDiff, _) = choice
+            let (name, priceDiff, _) = choice
             let button = SSRadioButton(frame: CGRectMake(self.nextViewOrigin.x, self.nextViewOrigin.y + 8, 160, 24))
-            button.backgroundColor = UIColor.greenColor()
-            button.setTitle(name + " + $\(priceDiff)", forState: UIControlState.Normal)
+            button.setTitle("  " + name + " + $\(priceDiff)", forState: UIControlState.Normal)
             button.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Left
             button.titleLabel!.font =  UIFont(name: button.titleLabel!.font.fontName,
-                                              size: quantLabel.font.pointSize-2)
+                                              size: quantLabel.font.pointSize)
+            button.setTitleColor(UIColor.blackColor(), forState: .Normal)
+            button.titleLabel!.enabled = true
             self.addViewToBottom(button)
             self.radioController.addButton(button)
         }
@@ -96,8 +99,12 @@ class OrderController: UIViewController {
          // let toggleOption: (name: String, priceDiff: Double, id: Int)
             let (name, priceDiff, id) = toggleOption
             let button = CheckBoxLabel(frame:  CGRectMake(self.nextViewOrigin.x, self.nextViewOrigin.y + 8, 160, 24))
-            button.backgroundColor = UIColor.blueColor()
-            button.setTitle(name + " + $\(priceDiff)", forState: UIControlState.Normal)
+            button.setTitle("  " + name + " + $\(priceDiff)", forState: UIControlState.Normal)
+            button.titleLabel!.font =  UIFont(name: button.titleLabel!.font.fontName,
+                size: quantLabel.font.pointSize)
+            button.sizeToFit()
+            button.titleLabel!.enabled = true
+            button.setTitleColor(UIColor.blackColor(), forState: .Normal)
             self.addViewToBottom(button)
         }
     }
@@ -105,7 +112,7 @@ class OrderController: UIViewController {
     private func buildPickup(){
         buildSectionLabel("Pickup")
         let pickup = UIDatePicker(frame: CGRect(origin: nextViewOrigin,
-            size: CGSize(width: Int(self.contentView.frame.width), height: 100)))
+            size: CGSize(width: Int(self.contentView.frame.width), height: 60)))
         pickup.minimumDate = foodItem!.truck!.open
         pickup.maximumDate = foodItem!.truck!.close
         pickup.datePickerMode = .Time
@@ -114,11 +121,13 @@ class OrderController: UIViewController {
     }
     
     private func buildOrderButton(){
+        /* 
         let order = UIButton(frame: CGRect(origin: nextViewOrigin,
                            size: CGSize(width: Int(self.contentView.frame.width), height: 35)))
         order.backgroundColor = UIColor.greenColor()
         order.titleLabel?.text = "Order"
-        self.addViewToBottom(order)
+        self.addViewToBottom(order) 
+    */
     }
     
     @IBAction func quantityChanged(sender: UIStepper) {

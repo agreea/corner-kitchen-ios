@@ -283,7 +283,6 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
         errorBanner.hidden = true
         lastName.hidden = true
         let buttonText = "Place My First Order"
-        let stringsize = buttonText.sizeWithFont(UIFont.SystemSize)
         registerVerifyButton.setTitle("Place My First Order", forState: UIControlState.Normal)
         setUpFirstTitle.text! = "Success!"
         setUpSubTitle.text! = "You're all set up. Now let's order some food."
