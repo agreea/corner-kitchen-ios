@@ -14,17 +14,22 @@
 		038A6CB01B521889004A0034 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 038A6CAF1B521889004A0034 /* Images.xcassets */; };
 		038A6CB31B521889004A0034 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 038A6CB11B521889004A0034 /* LaunchScreen.xib */; };
 		038A6CBF1B521889004A0034 /* chakulaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038A6CBE1B521889004A0034 /* chakulaTests.swift */; };
-		038A6CC91B53571E004A0034 /* APIController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038A6CC81B53571D004A0034 /* APIController.swift */; };
+		038A6CC91B53571E004A0034 /* FeedAPIController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038A6CC81B53571D004A0034 /* FeedAPIController.swift */; };
 		038A6CCB1B53920E004A0034 /* pacman.png in Resources */ = {isa = PBXBuildFile; fileRef = 038A6CCA1B53920E004A0034 /* pacman.png */; };
 		038A6CCD1B53992E004A0034 /* foodItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038A6CCC1B53992E004A0034 /* foodItem.swift */; };
 		038A6CCF1B548237004A0034 /* truck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038A6CCE1B548237004A0034 /* truck.swift */; };
 		038A6CD11B54ABF6004A0034 /* orderController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038A6CD01B54ABF6004A0034 /* orderController.swift */; };
 		038A6CD31B54E2E4004A0034 /* FoodFeedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038A6CD21B54E2E4004A0034 /* FoodFeedCell.swift */; };
+		03A04B101B63FF5900D947CF /* UserAPIController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03A04B0F1B63FF5800D947CF /* UserAPIController.swift */; };
+		03A04B121B64008500D947CF /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03A04B111B64008500D947CF /* API.swift */; };
 		03BD58691B5DD53900110205 /* SSRadioButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BD58681B5DD53900110205 /* SSRadioButton.swift */; };
 		03BD586B1B5DD5EE00110205 /* SSRadioButtonController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BD586A1B5DD5EE00110205 /* SSRadioButtonController.swift */; };
 		03BD586E1B5F043800110205 /* checked.png in Resources */ = {isa = PBXBuildFile; fileRef = 03BD586C1B5F043800110205 /* checked.png */; };
 		03BD586F1B5F043800110205 /* unchecked.png in Resources */ = {isa = PBXBuildFile; fileRef = 03BD586D1B5F043800110205 /* unchecked.png */; };
 		03BD58711B5F079C00110205 /* CheckBoxLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BD58701B5F079C00110205 /* CheckBoxLabel.swift */; };
+		03E1D5741B66F890009A55CA /* UserData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E1D5721B66F890009A55CA /* UserData+CoreDataProperties.swift */; };
+		03E1D5751B66F890009A55CA /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E1D5731B66F890009A55CA /* UserData.swift */; };
+		03ED3F081B658089000BAA38 /* chakula.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 03ED3F061B658089000BAA38 /* chakula.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,17 +54,23 @@
 		038A6CB81B521889004A0034 /* chakulaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = chakulaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		038A6CBD1B521889004A0034 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		038A6CBE1B521889004A0034 /* chakulaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = chakulaTests.swift; sourceTree = "<group>"; };
-		038A6CC81B53571D004A0034 /* APIController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIController.swift; sourceTree = "<group>"; };
+		038A6CC81B53571D004A0034 /* FeedAPIController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedAPIController.swift; sourceTree = "<group>"; };
 		038A6CCA1B53920E004A0034 /* pacman.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pacman.png; sourceTree = "<group>"; };
 		038A6CCC1B53992E004A0034 /* foodItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = foodItem.swift; sourceTree = "<group>"; };
 		038A6CCE1B548237004A0034 /* truck.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = truck.swift; sourceTree = "<group>"; };
 		038A6CD01B54ABF6004A0034 /* orderController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = orderController.swift; sourceTree = "<group>"; };
 		038A6CD21B54E2E4004A0034 /* FoodFeedCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoodFeedCell.swift; sourceTree = "<group>"; };
+		03A04B0F1B63FF5800D947CF /* UserAPIController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserAPIController.swift; sourceTree = "<group>"; };
+		03A04B111B64008500D947CF /* API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
 		03BD58681B5DD53900110205 /* SSRadioButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSRadioButton.swift; sourceTree = "<group>"; };
 		03BD586A1B5DD5EE00110205 /* SSRadioButtonController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSRadioButtonController.swift; sourceTree = "<group>"; };
 		03BD586C1B5F043800110205 /* checked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checked.png; sourceTree = "<group>"; };
 		03BD586D1B5F043800110205 /* unchecked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = unchecked.png; sourceTree = "<group>"; };
 		03BD58701B5F079C00110205 /* CheckBoxLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckBoxLabel.swift; sourceTree = "<group>"; };
+		03E1D5721B66F890009A55CA /* UserData+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UserData+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		03E1D5731B66F890009A55CA /* UserData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
+		03E1D5761B6720CE009A55CA /* chakula 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "chakula 2.xcdatamodel"; sourceTree = "<group>"; };
+		03ED3F071B658089000BAA38 /* chakula.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = chakula.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +94,8 @@
 		038A6C9A1B521889004A0034 = {
 			isa = PBXGroup;
 			children = (
+				03E1D5721B66F890009A55CA /* UserData+CoreDataProperties.swift */,
+				03E1D5731B66F890009A55CA /* UserData.swift */,
 				038A6CA51B521889004A0034 /* chakula */,
 				038A6CBB1B521889004A0034 /* chakulaTests */,
 				038A6CA41B521889004A0034 /* Products */,
@@ -105,13 +118,16 @@
 				038A6CAA1B521889004A0034 /* FoodFeedController.swift */,
 				038A6CCC1B53992E004A0034 /* foodItem.swift */,
 				0315D7A81B5CB53500656F85 /* RadioOption.swift */,
-				038A6CC81B53571D004A0034 /* APIController.swift */,
+				038A6CC81B53571D004A0034 /* FeedAPIController.swift */,
+				03A04B111B64008500D947CF /* API.swift */,
 				038A6CCE1B548237004A0034 /* truck.swift */,
 				038A6CD01B54ABF6004A0034 /* orderController.swift */,
 				03BD58701B5F079C00110205 /* CheckBoxLabel.swift */,
 				038A6CAC1B521889004A0034 /* Main.storyboard */,
+				03A04B0F1B63FF5800D947CF /* UserAPIController.swift */,
 				038A6CAF1B521889004A0034 /* Images.xcassets */,
 				038A6CB11B521889004A0034 /* LaunchScreen.xib */,
+				03ED3F061B658089000BAA38 /* chakula.xcdatamodeld */,
 				038A6CA61B521889004A0034 /* Supporting Files */,
 				038A6CD21B54E2E4004A0034 /* FoodFeedCell.swift */,
 				03BD58681B5DD53900110205 /* SSRadioButton.swift */,
@@ -192,12 +208,14 @@
 		038A6C9B1B521889004A0034 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftMigration = 0700;
 				LastSwiftUpdateCheck = 0700;
-				LastUpgradeCheck = 0640;
+				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = org.rhye;
 				TargetAttributes = {
 					038A6CA21B521889004A0034 = {
 						CreatedOnToolsVersion = 6.4;
+						DevelopmentTeam = UV52Y22TU7;
 					};
 					038A6CB71B521889004A0034 = {
 						CreatedOnToolsVersion = 6.4;
@@ -254,15 +272,20 @@
 			files = (
 				038A6CAB1B521889004A0034 /* FoodFeedController.swift in Sources */,
 				038A6CCF1B548237004A0034 /* truck.swift in Sources */,
+				03E1D5751B66F890009A55CA /* UserData.swift in Sources */,
 				038A6CD11B54ABF6004A0034 /* orderController.swift in Sources */,
 				03BD58711B5F079C00110205 /* CheckBoxLabel.swift in Sources */,
 				038A6CCD1B53992E004A0034 /* foodItem.swift in Sources */,
 				0315D7A91B5CB53500656F85 /* RadioOption.swift in Sources */,
+				03E1D5741B66F890009A55CA /* UserData+CoreDataProperties.swift in Sources */,
 				03BD586B1B5DD5EE00110205 /* SSRadioButtonController.swift in Sources */,
+				03A04B101B63FF5900D947CF /* UserAPIController.swift in Sources */,
+				03A04B121B64008500D947CF /* API.swift in Sources */,
 				03BD58691B5DD53900110205 /* SSRadioButton.swift in Sources */,
 				038A6CA91B521889004A0034 /* AppDelegate.swift in Sources */,
 				038A6CD31B54E2E4004A0034 /* FoodFeedCell.swift in Sources */,
-				038A6CC91B53571E004A0034 /* APIController.swift in Sources */,
+				038A6CC91B53571E004A0034 /* FeedAPIController.swift in Sources */,
+				03ED3F081B658089000BAA38 /* chakula.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -325,6 +348,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -391,10 +415,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = chakula/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "corner-kitchen.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -402,10 +430,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = chakula/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "corner-kitchen.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
@@ -423,6 +455,7 @@
 				);
 				INFOPLIST_FILE = chakulaTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "corner-kitchen.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/chakula.app/chakula";
 			};
@@ -438,6 +471,7 @@
 				);
 				INFOPLIST_FILE = chakulaTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "corner-kitchen.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/chakula.app/chakula";
 			};
@@ -474,6 +508,20 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		03ED3F061B658089000BAA38 /* chakula.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				03E1D5761B6720CE009A55CA /* chakula 2.xcdatamodel */,
+				03ED3F071B658089000BAA38 /* chakula.xcdatamodel */,
+			);
+			currentVersion = 03ED3F071B658089000BAA38 /* chakula.xcdatamodel */;
+			path = chakula.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 038A6C9B1B521889004A0034 /* Project object */;
 }

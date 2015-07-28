@@ -17,6 +17,6 @@ struct RadioOption {
     init(name: String, choices: [(name: String, priceDiff: Double, id: Int)]){
         self.familyName = name
         self.choices = choices
-        println("Radio created! Contents: \(choices)")
+        print("Radio created! Contents: \(choices)")
     }
 }

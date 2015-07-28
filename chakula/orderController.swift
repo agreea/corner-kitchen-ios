@@ -20,7 +20,7 @@ class OrderController: UIViewController {
     @IBOutlet weak var quantLabel: UILabel!
     @IBOutlet weak var orderTitle: UILabel!
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
@@ -44,12 +44,9 @@ class OrderController: UIViewController {
     
     override func viewDidLayoutSubviews(){
         let scrollViewBounds = scrollView.bounds
-        let containerViewBounds = contentView.bounds
-        
         var scrollViewInsets = UIEdgeInsetsZero
         scrollViewInsets.top = scrollViewBounds.size.height/2.0;
         scrollViewInsets.top -= contentView.bounds.size.height/2.0;
-        
         scrollViewInsets.bottom = scrollViewBounds.size.height/2.0
         scrollViewInsets.bottom -= contentView.bounds.size.height/2.0;
         scrollViewInsets.bottom += 1

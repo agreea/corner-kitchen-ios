@@ -9,56 +9,61 @@
 import Foundation
 import CoreLocation
 
-protocol APIControllerProtocol {
+protocol FeedAPIProtocol {
     func didReceiveAPIResults(results: [FoodItem])
     func queryFailed()
 }
 
-class APIController {
+class FeedAPIController {
     
-    var delegate: APIControllerProtocol
+    var delegate: FeedAPIProtocol
     var trucks: Dictionary<Int, Truck>
     var foodItems: [FoodItem]
-    init(delegate: APIControllerProtocol) {
-        self.delegate = delegate
+
+    init(delegate: FeedAPIProtocol) {
         self.trucks = Dictionary()
         self.foodItems = [FoodItem]()
+        self.delegate = delegate
     }
     
     func findFood(){
-        query("find_truck")
+        query(API.METHOD_FINDTRUCK)
     }
 
     private func query(method: String) {
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(buildRequest(method)) {
+        let (fromTime, untilTime) = getTimeRange()
+        let postString = "lat=1.00&lon=2.00&radius=1000000&open_from=\(fromTime)&open_til=\(untilTime)"
+        let task = API.newSession().dataTaskWithRequest(API.buildRequest(API.URL_TRUCK, method: method, postString: postString)) {
             data, response, error in
             if error != nil {
-                println("error=\(error)")
+                print("error=\(error)")
                 self.delegate.queryFailed()
                 return
             }
-            var err: NSError?
-            if let jsonResult = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &err) as? NSDictionary {
-                if(err != nil) {
-                    println("JSON Error \(err!.localizedDescription)")
-                    self.delegate.queryFailed()
+            do {
+                if let jsonResult =  try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as? NSDictionary {
+                    if let results: NSArray = jsonResult[API.RESULT_BODY] as? NSArray {
+                        self.handleQueryResults(results, method: method)
+                    }
                 }
-                if let results: NSArray = jsonResult["Return"] as? NSArray {
-                    self.handleResults(results, method: method)
-                }
+            } catch { // TODO: catch error
+                self.delegate.queryFailed()
             }
         }
-        task.resume()
+        task!.resume()
     }
-    
-    // First get trucks, finally get food
-    private func handleResults(results: NSArray, method: String) {
-        if(method == "find_food"){
+
+    /*
+    ============ TRUCK SERVLET ============
+    */
+
+    private func handleQueryResults(results: NSArray, method: String) {
+        if(method == API.METHOD_FINDFOOD){
             self.buildFoodList(results)
             self.delegate.didReceiveAPIResults(self.foodItems)
-        } else if(method == "find_truck"){
+        } else if(method == API.METHOD_FINDTRUCK){
             self.buildTruckList(results)
-            self.query("find_food")
+            self.query(API.METHOD_FINDFOOD)
         }
     }
     
@@ -127,23 +132,22 @@ class APIController {
         }
         return toggleOptions
     }
-    private func buildRequest(method: String) -> NSMutableURLRequest {
-        var request = NSMutableURLRequest(URL: NSURL(string: "http://corner.rhye.org/api/truck")!)
-        request.HTTPMethod = "POST"
-        let (fromTime, untilTime) = getTimeRange()
-        let postString = "method=\(method)&lat=1.00&lon=2.00&radius=1000000&open_from=\(fromTime)&open_til=\(untilTime)"
-        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
-        return request
-    }
-
+    
     private func getTimeRange() -> (Int, Int) {
-        var min_in_seconds = 60
-        var hour_in_seconds = min_in_seconds * 60
-        var fromTimeRaw = NSDate().timeIntervalSince1970
-        var fromTimeSeconds: Int = Int(round(fromTimeRaw))
+        let min_in_seconds = 60
+        let hour_in_seconds = min_in_seconds * 60
+        let fromTimeRaw = NSDate().timeIntervalSince1970
+        let fromTimeSeconds: Int = Int(round(fromTimeRaw))
         var untilTime: Int = fromTimeSeconds + 600 * hour_in_seconds
         // TODO: timestamp bug fixes
         return (0, 1636733735)
     }
-
+    
+    /* 
+    ============ USER SERVLET ============
+    */
+    
+    /*
+    ============ SERVER REQUESTS ============
+    */
 }

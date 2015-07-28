@@ -29,7 +29,7 @@ struct FoodItem {
         self.truck = truck
         self.radioOptions = radioOptions
         self.toggleOptions = toggleOptions
-        println("Radios: \(radioOptions)")
-        println("Toggles: \(toggleOptions)")
+        print("Radios: \(radioOptions)")
+        print("Toggles: \(toggleOptions)")
     }
 }
