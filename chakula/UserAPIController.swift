@@ -86,11 +86,12 @@ class UserAPIController {
         if result[API.RESULT_SUCCESS] as! Int == 1 {
             let resultBody = result[API.RESULT_BODY] as! NSDictionary
             sessionToken = resultBody[API.USER.SESSION_TOKEN] as! String
-            delegate.verifyResult("Success!", didSucceed: true)
+            print(sessionToken)
             UserData.newEntry(managedObjectContext,
-                                firstName: firstName!, lastName: lastName!,
-                                sessionToken: sessionToken!)
+                firstName: firstName!, lastName: lastName!,
+                sessionToken: sessionToken!)
             UserData.save(managedObjectContext)
+            delegate.verifyResult("Success!", didSucceed: true)
         } else {
             delegate.verifyResult("\(result[API.RESULT_ERROR]!)", didSucceed: false)
         }

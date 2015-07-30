@@ -43,6 +43,7 @@ class FeedAPIController {
             do {
                 if let jsonResult =  try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as? NSDictionary {
                     if let results: NSArray = jsonResult[API.RESULT_BODY] as? NSArray {
+                        print("Landed")
                         self.handleQueryResults(results, method: method)
                     }
                 }
@@ -60,6 +61,7 @@ class FeedAPIController {
     private func handleQueryResults(results: NSArray, method: String) {
         if(method == API.METHOD_FINDFOOD){
             self.buildFoodList(results)
+            print(self.foodItems.count)
             self.delegate.didReceiveAPIResults(self.foodItems)
         } else if(method == API.METHOD_FINDTRUCK){
             self.buildTruckList(results)
@@ -68,6 +70,7 @@ class FeedAPIController {
     }
     
     private func buildTruckList(results: NSArray) {
+        print(results)
         let inputFormatter = NSDateFormatter()
         inputFormatter.dateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"
         for entry in results {
@@ -92,14 +95,15 @@ class FeedAPIController {
     private func buildFoodList(results: NSArray){
         for entry in results {
             if let item = entry as? NSDictionary,
-                let truckId = item["Truck_id"] as? Int{
-                    foodItems.append(FoodItem(name: item["Name"] as? String,
-                        description: item["Description"] as? String,
-                        imgURL: item["Pic_url"] as? String,
-                        price: item["Price"] as? Double,
+                let truckId = item[API.TRUCK.ID] as? Int{
+                    foodItems.append(FoodItem(id: item[API.MENU_ITEM.MENU_ID] as? Int,
+                        name: item[API.MENU_ITEM.NAME] as? String,
+                        description: item[API.MENU_ITEM.DESC] as? String,
+                        imgURL: item[API.MENU_ITEM.PIC_URL] as? String,
+                        price: item[API.MENU_ITEM.PRICE] as? Double,
                         truck: trucks[truckId],
-                        radioOptions: self.getRadioOptions(item["ListOptions"] as! NSArray),
-                        toggleOptions: self.getToggleOptions(item["ToggleOptions"] as! NSArray)))
+                        radioOptions: self.getRadioOptions(item[API.MENU_ITEM.LIST_OPTIONS_MENU] as! NSArray),
+                        toggleOptions: self.getToggleOptions(item[API.MENU_ITEM.TOGGLE_OPTIONS_MENU] as! NSArray)))
             }
         }
     }
@@ -137,10 +141,11 @@ class FeedAPIController {
         let min_in_seconds = 60
         let hour_in_seconds = min_in_seconds * 60
         let fromTimeRaw = NSDate().timeIntervalSince1970
+        print(round(fromTimeRaw))
         let fromTimeSeconds: Int = Int(round(fromTimeRaw))
-        var untilTime: Int = fromTimeSeconds + 600 * hour_in_seconds
-        // TODO: timestamp bug fixes
-        return (0, 1636733735)
+        let untilTime = Int(fromTimeSeconds + 3 * hour_in_seconds)
+        print(untilTime)
+        return (fromTimeSeconds, untilTime)
     }
     
     /* 

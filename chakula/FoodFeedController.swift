@@ -104,8 +104,7 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
     func didReceiveAPIResults(results: [FoodItem]) {
         dispatch_async(dispatch_get_main_queue(), {
             self.foodItems = results
-            if(self.foodItems.count == 0) {
-            } else {
+            if(self.foodItems.count != 0) {
                 self.foodList!.reloadData()
             }
             UIApplication.sharedApplication().networkActivityIndicatorVisible = false
@@ -121,14 +120,21 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     func setFeedMessage(message: String){
-        let messageLabel = UILabel(frame: CGRectMake(0, 0, self.foodList.bounds.size.width, self.foodList.bounds.size.height))
+        let messageLabel = UILabel(frame: CGRectMake(30, 0, self.foodList.bounds.size.width - 30, self.foodList.bounds.size.height))
         messageLabel.text = message
         messageLabel.sizeToFit()
-        self.foodList.backgroundView = messageLabel
-        self.foodList.separatorStyle = UITableViewCellSeparatorStyle.None
+        messageLabel.textAlignment = .Center
+        foodList.backgroundView = messageLabel
+        foodList.separatorStyle = UITableViewCellSeparatorStyle.None
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if (foodItems.count != 0) {
+            foodList.separatorStyle = UITableViewCellSeparatorStyle.SingleLine;
+        } else {
+            setFeedMessage("Couldn't find any food nearby :/")
+        }
+        
         return foodItems.count
     }
 
@@ -243,6 +249,7 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
     
     func verifyResult(message: String, didSucceed: Bool) {
         if didSucceed {
+            self.userData = userApi.getUserData()
             showVerifyCompleteInterface()
         } else {
             revealErrorBanner(message)
@@ -283,7 +290,7 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
         errorBanner.hidden = true
         lastName.hidden = true
         let buttonText = "Place My First Order"
-        registerVerifyButton.setTitle("Place My First Order", forState: UIControlState.Normal)
+        registerVerifyButton.setTitle(buttonText, forState: UIControlState.Normal)
         setUpFirstTitle.text! = "Success!"
         setUpSubTitle.text! = "You're all set up. Now let's order some food."
     }
@@ -312,6 +319,8 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
         if let orderController: OrderController = segue.destinationViewController as? OrderController {
             let foodItemIndex = foodList!.indexPathForSelectedRow!.row
             orderController.foodItem = foodItems[foodItemIndex]
+            print(userData!.sessionToken)
+            orderController.token = userData!.sessionToken!
         }
     }
 }

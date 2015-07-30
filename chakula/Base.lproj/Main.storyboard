@@ -431,6 +431,9 @@
                                 <state key="normal" title="Place Order">
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
+                                <connections>
+                                    <action selector="orderpressed:" destination="lhc-8f-fsb" eventType="touchUpInside" id="TWZ-nO-8ag"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -457,6 +460,7 @@
                         <outlet property="descriptionLabel" destination="38v-2F-hIx" id="pQz-8w-QC3"/>
                         <outlet property="orderTitle" destination="RuN-hF-uWj" id="Jcq-MA-N9f"/>
                         <outlet property="quantLabel" destination="S3Y-Oz-Jfj" id="fZs-h0-Upi"/>
+                        <outlet property="quantStepper" destination="Sn2-hL-7xB" id="oZM-1O-R9U"/>
                         <outlet property="scrollView" destination="Eps-bm-IPd" id="YQE-cB-3Uz"/>
                     </connections>
                 </viewController>

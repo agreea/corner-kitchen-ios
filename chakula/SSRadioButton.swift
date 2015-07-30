@@ -22,7 +22,7 @@ class SSRadioButton: UIButton {
     /**
     Color of the radio button circle. Default value is UIColor red.
     */
-    @IBInspectable var circleColor: UIColor = UIColor.redColor() {
+    @IBInspectable var circleColor: UIColor = UIColor.blueColor() {
         didSet {
             circleLayer.strokeColor = circleColor.CGColor
             self.toggleButon()
@@ -90,7 +90,7 @@ class SSRadioButton: UIButton {
     }
     
     private func fillCirclePath() -> UIBezierPath {
-        return UIBezierPath(ovalInRect: CGRectInset(circleFrame(), 2, 2))
+        return UIBezierPath(ovalInRect: CGRectInset(circleFrame(), 4, 4))
     }
     
     override func layoutSubviews() {

@@ -14,14 +14,16 @@ struct FoodItem {
     let imgURL: String?
     let price: Double?
     let truck: Truck?
+    let id: Int?
     var radioOptions: [RadioOption]
     var toggleOptions: [(name: String, priceDiff: Double, id: Int)]
 
     // list options
     // toggle options
-    init(name: String?, description: String?, imgURL: String?,
+    init(id: Int?, name: String?, description: String?, imgURL: String?,
         price: Double?, truck: Truck?, radioOptions: [RadioOption],
         toggleOptions: [(name: String, priceDiff: Double, id: Int)]){
+        self.id = id
         self.name = name
         self.description = description
         self.imgURL = imgURL
