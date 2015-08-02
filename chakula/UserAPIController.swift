@@ -102,6 +102,7 @@ class UserAPIController {
         do {
             let fetchedEntities = try managedObjectContext.executeFetchRequest(request) as! [UserData]
             if fetchedEntities.count != 0 {
+                print(fetchedEntities[0])
                 return fetchedEntities[0]
             }
         } catch {
