@@ -20,10 +20,11 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
         if you don't have the last known location, show an error message (?)
     */
     var manager: CLLocationManager!
-
+    var currentCoord: CLLocationCoordinate2D!
     // Registration and Login interface components
     var userApi: UserAPIController!
     var userData: UserData?
+    var refreshControl:UIRefreshControl!
     @IBOutlet weak var errorBanner: UILabel!
     @IBOutlet weak var registerLogin: UIView!
     @IBOutlet weak var password: UITextField!
@@ -51,7 +52,10 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
         print("About to invoke userAPI")
         userApi = UserAPIController(delegate: self)
         print("About to invoke location manager")
-
+        self.refreshControl = UIRefreshControl()
+        self.refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
+        self.refreshControl.addTarget(self, action: "refresh:", forControlEvents: UIControlEvents.ValueChanged)
+        self.foodList.addSubview(refreshControl)
         manager = CLLocationManager()
         if #available(iOS 8.0, *) {
             manager.requestWhenInUseAuthorization()
@@ -92,6 +96,8 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
     func locationManager(manager: CLLocationManager,
         didUpdateLocations locations: [CLLocation]){
         let location = locations.last as CLLocation!
+        feedApi.updateLocation(location.coordinate)
+        print(location)
     }
     
     override func didReceiveMemoryWarning() {
@@ -99,6 +105,11 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    
+    }
+    
+    func refresh(sender:AnyObject) {
+        feedApi.findFood()
     }
     
     func didReceiveAPIResults(results: [FoodItem]) {
@@ -108,7 +119,10 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
                 self.foodList!.reloadData()
             }
             UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            self.refreshControl.endRefreshing()
+
         })
+
     }
     
     func queryFailed(){
@@ -116,6 +130,7 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
                 // TODO: Show error message on feed
             UIApplication.sharedApplication().networkActivityIndicatorVisible = false
             self.setFeedMessage("No network connection :(")
+            self.refreshControl.endRefreshing()
         })
     }
     
@@ -159,7 +174,6 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
                         if let cellToUpdate = tableView.cellForRowAtIndexPath(indexPath) as? FoodFeedCell {
                             print("Got 'Cell to update!'")
                                 cellToUpdate.foodImage!.image = image
-                                cellToUpdate.truckName?.sizeToFit()
                             }
                         })
                     } else {
@@ -179,10 +193,13 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
         cell.foodPrice?.text = "$\(foodItem.price!)"
         cell.foodImage?.image = UIImage(named: "pacman.png")
         cell.truckName?.text = foodItem.truck!.name
-        cell.truckName?.sizeToFit()
-        cell.distance?.text = "\(foodItem.truck!.dist)mi"
-        cell.truckName?.translatesAutoresizingMaskIntoConstraints
-        cell.truckName?.sizeToFit()
+        if foodItem.truck!.dist < 0.1 {
+            cell.distance?.text = "here!"
+        } else {
+            cell.distance?.text = "\(foodItem.truck!.dist)mi"
+        }
+//        cell.truckName?.translatesAutoresizingMaskIntoConstraints
+//        cell.truckName?.sizeToFit()
         print("width: \(cell.truckName.frame.width)")
         print("size: \(cell.truckName.frame.size)")
         print("origin: \(cell.truckName.frame.origin)")

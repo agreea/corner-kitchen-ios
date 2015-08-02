@@ -19,20 +19,31 @@ class FeedAPIController {
     var delegate: FeedAPIProtocol
     var trucks: Dictionary<Int, Truck>
     var foodItems: [FoodItem]
-
+    var coord: CLLocationCoordinate2D?
+    
     init(delegate: FeedAPIProtocol) {
         self.trucks = Dictionary()
         self.foodItems = [FoodItem]()
         self.delegate = delegate
     }
-    
+    func updateLocation(coord: CLLocationCoordinate2D){
+        if self.coord == nil {
+            self.coord = coord
+            findFood()
+        }
+        self.coord = coord
+    }
     func findFood(){
-        query(API.METHOD_FINDTRUCK)
+        if coord != nil {
+            query(API.METHOD_FINDTRUCK)
+        } else {
+            delegate.queryFailed()
+        }
     }
 
     private func query(method: String) {
         let (fromTime, untilTime) = getTimeRange()
-        let postString = "lat=1.00&lon=2.00&radius=1000000&open_from=\(fromTime)&open_til=\(untilTime)"
+        let postString = "lat=\(coord!.latitude)&lon=\(coord!.longitude)&radius=1000000&open_from=\(fromTime)&open_til=\(untilTime)"
         let task = API.newSession().dataTaskWithRequest(API.buildRequest(API.URL_TRUCK, method: method, postString: postString)) {
             data, response, error in
             if error != nil {
