@@ -8,8 +8,12 @@
 
 import Foundation
 
-struct API {
-    static let URL = "http://52.2.192.205/api/",
+protocol APICallback {
+    func resultDidReturn(result: NSDictionary, method: String)
+    func errorDidReturn(error: ErrorType, method: String)
+}
+class API: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate {
+    static let URL = "https://yaychakula.com/api/",
                 URL_USER = URL + "user",
                 URL_TRUCK = URL + "truck",
                 METHOD_REGISTER = "register",
@@ -36,8 +40,54 @@ struct API {
         return NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: NSOperationQueue.mainQueue())
     }
     
+    
+    func post(request: NSMutableURLRequest!, callback: APICallback, method: String) {
+            let task = API.newSession().dataTaskWithRequest(request){
+                data, response, error in
+                if error != nil {
+                    callback.errorDidReturn(error!, method: method)
+                    return
+                }
+                do {
+                    if let jsonResult =  try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as? NSDictionary {
+                        print("calling callback")
+                        callback.resultDidReturn(jsonResult, method: method)
+                    }
+                } catch { // TODO: catch error
+                    callback.errorDidReturn(error, method: method)
+                }
+            }
+            task!.resume()
+    }
+    
+    func URLSession(session: NSURLSession,
+        task: NSURLSessionTask,
+        didReceiveChallenge challenge: NSURLAuthenticationChallenge,
+        completionHandler: (NSURLSessionAuthChallengeDisposition,
+        NSURLCredential?) -> Void) {
+            completionHandler(
+                NSURLSessionAuthChallengeDisposition.UseCredential,
+                NSURLCredential(forTrust:
+                    challenge.protectionSpace.serverTrust!))
+    }
+    
+    func URLSession(session: NSURLSession,
+        task: NSURLSessionTask,
+        willPerformHTTPRedirection response: NSHTTPURLResponse,
+        newRequest request: NSURLRequest,
+        completionHandler: (NSURLRequest?) -> Void) {
+            let newRequest : NSURLRequest? = request
+//            print(newRequest?.description)
+            completionHandler(newRequest)
+    }
+
     struct USER {
-        static let SESSION_TOKEN = "Session_token"
+        static let SESSION_TOKEN = "Session_token",
+                    FIRST_NAME = "First_name",
+                    LAST_NAME = "Last_name",
+                    ID = "Id",
+                    Phone = "Phone"
+        
     }
     struct TRUCK {
         static let ID = "Truck_id"

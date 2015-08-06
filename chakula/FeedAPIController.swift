@@ -14,7 +14,7 @@ protocol FeedAPIProtocol {
     func queryFailed()
 }
 
-class FeedAPIController {
+class FeedAPIController: APICallback {
     
     var delegate: FeedAPIProtocol
     var trucks: Dictionary<Int, Truck>
@@ -44,41 +44,29 @@ class FeedAPIController {
     private func query(method: String) {
         let (fromTime, untilTime) = getTimeRange()
         let postString = "lat=\(coord!.latitude)&lon=\(coord!.longitude)&radius=1000000&open_from=\(fromTime)&open_til=\(untilTime)"
-        let task = API.newSession().dataTaskWithRequest(API.buildRequest(API.URL_TRUCK, method: method, postString: postString)) {
-            data, response, error in
-            if error != nil {
-                print("error=\(error)")
-                self.delegate.queryFailed()
-                return
-            }
-            do {
-                if let jsonResult =  try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as? NSDictionary {
-                    if let results: NSArray = jsonResult[API.RESULT_BODY] as? NSArray {
-                        print("Landed")
-                        self.handleQueryResults(results, method: method)
-                    }
-                }
-            } catch { // TODO: catch error
-                self.delegate.queryFailed()
+        API().post(API.buildRequest(API.URL_TRUCK, method: method, postString: postString), callback: self, method: method)
+    }
+    
+    func resultDidReturn(jsonResult: NSDictionary, method: String) {
+        print(jsonResult)
+        if let results = jsonResult[API.RESULT_BODY] as? NSArray {
+            if(method == API.METHOD_FINDFOOD){
+                buildFoodList(results)
+                print(self.foodItems.count)
+                delegate.didReceiveAPIResults(self.foodItems)
+            } else if(method == API.METHOD_FINDTRUCK) {
+                buildTruckList(results)
+                query(API.METHOD_FINDFOOD)
             }
         }
-        task!.resume()
     }
-
+    
+    func errorDidReturn(error: ErrorType, method: String) {
+        //
+    }
     /*
     ============ TRUCK SERVLET ============
     */
-
-    private func handleQueryResults(results: NSArray, method: String) {
-        if(method == API.METHOD_FINDFOOD){
-            self.buildFoodList(results)
-            print(self.foodItems.count)
-            self.delegate.didReceiveAPIResults(self.foodItems)
-        } else if(method == API.METHOD_FINDTRUCK){
-            self.buildTruckList(results)
-            self.query(API.METHOD_FINDFOOD)
-        }
-    }
     
     private func buildTruckList(results: NSArray) {
         print(results)
@@ -104,6 +92,9 @@ class FeedAPIController {
     }
     
     private func buildFoodList(results: NSArray){
+        if foodItems.count > 0 {
+            foodItems = []
+        }
         for entry in results {
             if let item = entry as? NSDictionary,
                 let truckId = item[API.TRUCK.ID] as? Int{

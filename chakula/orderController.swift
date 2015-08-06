@@ -15,12 +15,14 @@ class OrderController: UIViewController, OrderRadioControllerProtocol {
     var token: String?
     var unitTotal: Double = 0
     var radioControllers = [OrderRadioController]()
+    var toggles = [OrderToggleOption]()
+    
     var totalPrice: Double {
         get {
             return unitTotal * quantStepper.value
         }
         set {
-            totalLabel.text = "Total: $\(unitTotal * quantStepper.value)"
+            orderButton.titleLabel?.text = "Place Order - $\(unitTotal * quantStepper.value)"
         }
     }
     var priceChangers = [String: Double]()
@@ -29,8 +31,8 @@ class OrderController: UIViewController, OrderRadioControllerProtocol {
     @IBOutlet weak var descriptionLabel: UILabel!
     @IBOutlet weak var quantStepper: UIStepper!
     @IBOutlet weak var quantLabel: UILabel!
-    @IBOutlet weak var orderTitle: UILabel!
-    var totalLabel: UILabel!
+    @IBOutlet weak var orderButton: UIButton!
+
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
@@ -38,10 +40,10 @@ class OrderController: UIViewController, OrderRadioControllerProtocol {
     override func viewDidLoad() {
         super.viewDidLoad()
         if foodItem != nil {
+            self.title = foodItem!.name!
             unitTotal = Double((foodItem?.price)!)
             descriptionLabel?.lineBreakMode = .ByWordWrapping
             descriptionLabel?.numberOfLines = 0
-            orderTitle.text = foodItem!.name!
             descriptionLabel?.text = foodItem!.description
             self.nextViewOrigin = CGPoint(x: quantLabel.frame.minX,
                                      y: quantLabel.frame.maxY + 60)
@@ -49,7 +51,6 @@ class OrderController: UIViewController, OrderRadioControllerProtocol {
             priceChangers = [:]
             buildRadioOptions()
             buildToggles()
-            buildTotalLabel()
             buildPickup()
 //             TODO: make scrollview
 //            self.scrollView.setContentOffset(CGPointMake(0, self.scrollView.contentOffset.y))
@@ -104,16 +105,22 @@ class OrderController: UIViewController, OrderRadioControllerProtocol {
     }
     
     private func buildToggles(){
+        buildSectionLabel("Extras")
         for toggleOption in foodItem!.toggleOptions {
             // make a new button with a new associated option
          // let toggleOption: (name: String, priceDiff: Double, id: Int)
             let (name, priceDiff, id) = toggleOption
             let button = OrderToggleOption(name: name, id: id, priceDiff: priceDiff, frame:  CGRectMake(self.nextViewOrigin.x, self.nextViewOrigin.y + 8, 160, 24), fontSize: quantLabel.font.pointSize)
-            button.setTitle("  " + name + " + $\(priceDiff)", forState: UIControlState.Normal)
+            var optionName = "  " + name
+            if priceDiff > 0 {
+                optionName += " + $\(priceDiff)"
+            }
+            button.setTitle(optionName, forState: UIControlState.Normal)
             button.sizeToFit()
             button.titleLabel!.enabled = true
             button.setTitleColor(UIColor.blackColor(), forState: .Normal)
             button.addTarget(self, action: "toggleChanged:", forControlEvents: UIControlEvents.TouchUpInside)
+            toggles.append(button)
             priceChangers["\(button.id!)"] = 0.0
             self.addViewToBottom(button)
         }
@@ -146,20 +153,15 @@ class OrderController: UIViewController, OrderRadioControllerProtocol {
         self.addViewToBottom(pickup)
     }
     
-    private func buildTotalLabel(){
-        totalLabel = UILabel(frame: CGRectMake(self.nextViewOrigin.x, nextViewOrigin.y + 8, UIScreen.mainScreen().bounds.width - 24, 40))
-        totalLabel.text = "Total: $\(unitTotal)"
-        totalLabel.font =  UIFont(name: totalLabel.font.fontName,
-                             size: quantLabel.font.pointSize + 4)
-        totalLabel.textAlignment = .Right
-        self.addViewToBottom(totalLabel)
-    }
-    
     // EVENT LISTENERS
     func toggleChanged(sender: AnyObject) {
         var priceModifier = 0.0
-        // TODO: make into switch/case
         if let toggle = sender as? OrderToggleOption {
+            for aToggle in toggles {
+                if toggle.id == aToggle.id {
+                    aToggle.isChecked = toggle.isChecked
+                }
+            }
             if toggle.isChecked {
                 print("Toggle wasn't checked when it was pressed!")
                 priceModifier = toggle.priceDiff!
@@ -181,9 +183,9 @@ class OrderController: UIViewController, OrderRadioControllerProtocol {
             print("\(id) --> \(priceModifier)")
             unitTotal += priceModifier
         }
-//        unitTotal += priceDiff
         totalPrice = unitTotal * quantStepper.value
     }
+    
     private func getRadioSelectionIds() -> [Int]{
         var radioSelectionIds = [Int]()
         for radioController in radioControllers {
@@ -193,8 +195,19 @@ class OrderController: UIViewController, OrderRadioControllerProtocol {
         }
         return radioSelectionIds
     }
+    
+    private func getToggleSelectionIds() -> [Int] {
+        var toggledIds = [Int]()
+        for toggle in toggles {
+            if toggle.isChecked {
+                toggledIds.append(toggle.id!)
+            }
+        }
+        return toggledIds
+    }
+    
     @IBAction func quantityChanged(sender: UIStepper) {
-
+        
     }
     
     @IBAction func orderpressed(sender: AnyObject) {
@@ -205,5 +218,25 @@ class OrderController: UIViewController, OrderRadioControllerProtocol {
     @IBAction func stepperChanged(sender: UIStepper) {
         quantLabel?.text = "Quantity: \(Int(sender.value))"
         priceChanged()
-    }    
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        print("Segue coming!")
+        // if let completeOrderController = segue.destinationViewController as? OrderController {
+//        var order = Order()
+//        order.foodItem = foodItem
+//        order.quantity = Int(quantStepper.value)
+//        order.radioOptions = getRadioSelectionIds()
+//        order.toggledOptions = getToggleSelectionIds()
+//        completeOrderController.order = order
+        
+        
+//        if let orderController = segue.destinationViewController as? OrderController {
+//            let foodItemIndex = foodList!.indexPathForSelectedRow!.row
+//            orderController.foodItem = foodItems[foodItemIndex]
+//            print(userData!.sessionToken)
+//            orderController.token = userData!.sessionToken!
+//        }
+    }
+
 }

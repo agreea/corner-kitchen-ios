@@ -10,8 +10,7 @@ import UIKit
 import CoreLocation
 import CoreData
 
-class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDelegate, FeedAPIProtocol, UserAPIProtocol, CLLocationManagerDelegate,
-    UITextFieldDelegate {
+class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDelegate, FeedAPIProtocol, CLLocationManagerDelegate {
     // TODO: figure out flow based off of location availability
     /*
         open app
@@ -25,17 +24,6 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
     var userApi: UserAPIController!
     var userData: UserData?
     var refreshControl:UIRefreshControl!
-    @IBOutlet weak var errorBanner: UILabel!
-    @IBOutlet weak var registerLogin: UIView!
-    @IBOutlet weak var password: UITextField!
-    @IBOutlet weak var phoneNumberVerifyCode: UITextField!
-    @IBOutlet weak var firstName: UITextField!
-    @IBOutlet weak var lastName: UITextField!
-    @IBOutlet weak var registerVerifyButton: UIButton!
-    @IBOutlet weak var loginButton: UIButton!
-    @IBOutlet weak var backButton: UIButton!
-    @IBOutlet weak var setUpSubTitle: UILabel!
-    @IBOutlet weak var setUpFirstTitle: UILabel!
     
     var foodItems = [FoodItem]()
     let kCellIdentifier: String = "foodCell"
@@ -50,10 +38,11 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
         print("About to invoke feedAPI")
         feedApi = FeedAPIController(delegate: self)
         print("About to invoke userAPI")
-        userApi = UserAPIController(delegate: self)
+        userApi = UserAPIController()
+        userData = userApi.getUserData()
         print("About to invoke location manager")
         self.refreshControl = UIRefreshControl()
-        self.refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
+        self.refreshControl.attributedTitle = NSAttributedString(string: "Refreshing")
         self.refreshControl.addTarget(self, action: "refresh:", forControlEvents: UIControlEvents.ValueChanged)
         self.foodList.addSubview(refreshControl)
         manager = CLLocationManager()
@@ -65,16 +54,13 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
         manager.delegate = self
         manager.desiredAccuracy = kCLLocationAccuracyBest
         manager.startUpdatingLocation()
-        phoneNumberVerifyCode.placeholder = "Phone #"
-        password.placeholder = "Password"
-        password.delegate = self
-        phoneNumberVerifyCode.delegate = self
+        print("session manager handled")
+
+        print("firstname lastname password handled")
+
         outputFormatter.dateFormat = "hh':'mm"
         outputFormatter.locale = NSLocale(localeIdentifier: "en_US")
-        setUpFirstTitle.lineBreakMode = .ByWordWrapping
-        setUpFirstTitle.numberOfLines = 0
-        setUpSubTitle.numberOfLines = 0
-        setUpSubTitle.lineBreakMode = .ByWordWrapping
+        print("setup titles handled")
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         feedApi.findFood()
     }
@@ -112,15 +98,15 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
         feedApi.findFood()
     }
     
-    func didReceiveAPIResults(results: [FoodItem]) {
+    func didReceiveAPIResults(foodItems: [FoodItem]) {
+        print("FOOD ITEMS SIZE: \(foodItems.count)")
         dispatch_async(dispatch_get_main_queue(), {
-            self.foodItems = results
+            self.foodItems = foodItems
             if(self.foodItems.count != 0) {
                 self.foodList!.reloadData()
             }
             UIApplication.sharedApplication().networkActivityIndicatorVisible = false
             self.refreshControl.endRefreshing()
-
         })
 
     }
@@ -211,124 +197,11 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     override func shouldPerformSegueWithIdentifier(identifier: String, sender: AnyObject?) -> Bool{
-        if userData == nil {
-            userData = userApi.getUserData()
-        }
-        if userData != nil  {
-            return true
-        } else {
-            registerLogin.hidden = false
+        if identifier == "toOrder" && userData == nil {
+            performSegueWithIdentifier("toRegisterLogin", sender: sender)
             return false
         }
-    }
-
-    @IBAction func cancelRegistrationPressed(sender: AnyObject) {
-        registerLogin.hidden = true
-    }
-    
-    @IBAction func registerPressed(sender: UIButton) {
-        if sender.titleLabel?.text! == "Register" {
-            attemptRegister()
-        } else if sender.titleLabel?.text! == "Verify" {
-            userApi.verify(phoneNumberVerifyCode.text!)
-            errorBanner.hidden = true
-        } else if sender.titleLabel?.text! == "Place My First Order" {
-            performSegueWithIdentifier("toOrder", sender: nil)
-            registerLogin.hidden = true
-        }
-    }
-    
-    private func attemptRegister() {
-        if phoneNumberVerifyCode.text!.characters.count != 10 {
-            revealErrorBanner("We need a 10-digit phone number!")
-        } else if password.text?.characters.count < 4 {
-            revealErrorBanner("Please enter a longer password")
-        } else if firstName.text!.characters.count < 2 {
-            revealErrorBanner("Please enter your full first name")
-        } else if lastName.text!.characters.count < 2 {
-            revealErrorBanner("Please enter your full last name")
-        } else {
-            userApi.register(Int(phoneNumberVerifyCode.text!)!, pass: password.text!, first: firstName.text!, last: lastName.text!)
-            showRegisterInProgress()
-        }
-    }
-    
-    
-    func registerResult(message: String, didSucceed: Bool) {
-        registerVerifyButton.userInteractionEnabled = true
-        loginButton.userInteractionEnabled = true
-        if didSucceed {
-            showVerifyInterface(message)
-        } else {
-            revealErrorBanner(message)
-        }
-    }
-    
-    func verifyResult(message: String, didSucceed: Bool) {
-        if didSucceed {
-            self.userData = userApi.getUserData()
-            showVerifyCompleteInterface()
-        } else {
-            revealErrorBanner(message)
-        }
-    }
-    
-    private func revealErrorBanner(message: String) {
-        errorBanner.text = message
-        errorBanner.hidden = false
-    }
-    
-    private func showRegisterInProgress(){
-        registerVerifyButton.titleLabel?.text = "Registering..."
-        registerVerifyButton.userInteractionEnabled = false
-        loginButton.userInteractionEnabled = false
-        errorBanner.hidden = true
-    }
-    
-    private func showVerifyInterface(message: String){
-        loginButton.hidden = true
-        firstName.hidden = true
-        lastName.hidden = true
-        password.hidden = true
-        errorBanner.hidden = true
-        backButton.hidden = false
-        phoneNumberVerifyCode.text = ""
-        phoneNumberVerifyCode.placeholder = "Verification code"
-        phoneNumberVerifyCode.keyboardType = .Default
-        setUpFirstTitle.text = message
-        setUpSubTitle.text = "A text should come any second now..."
-        registerVerifyButton.setTitle("Verify", forState: .Normal)
-    }
-    
-    private func showVerifyCompleteInterface() {
-        password.hidden = true
-        phoneNumberVerifyCode.hidden = true
-        firstName.hidden = true
-        errorBanner.hidden = true
-        lastName.hidden = true
-        let buttonText = "Place My First Order"
-        registerVerifyButton.setTitle(buttonText, forState: UIControlState.Normal)
-        setUpFirstTitle.text! = "Success!"
-        setUpSubTitle.text! = "You're all set up. Now let's order some food."
-    }
-
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true;
-    }
-
-    @IBAction func setUpBackButtonPressed(sender: AnyObject) {
-        print("Setup back button pressed")
-        loginButton.hidden = false
-        password.hidden = false
-        phoneNumberVerifyCode.text = ""
-        phoneNumberVerifyCode.placeholder = "Phone #"
-        phoneNumberVerifyCode.keyboardType = .NumberPad
-        firstName.hidden = false
-        lastName.hidden = false
-        setUpFirstTitle.text = "Before you order..."
-        setUpSubTitle.text = "Set up your Chakula account :)"
-        registerVerifyButton.setTitle("Register", forState: UIControlState.Normal)
+        return true
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
