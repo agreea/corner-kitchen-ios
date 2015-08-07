@@ -38,6 +38,7 @@
 		03EAE4B61B69CDF30004E81E /* OrderRadioController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03EAE4B51B69CDF30004E81E /* OrderRadioController.swift */; };
 		03ED3F081B658089000BAA38 /* chakula.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 03ED3F061B658089000BAA38 /* chakula.xcdatamodeld */; };
 		03F0F85E1B732EE800D13C54 /* order.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F0F85D1B732EE800D13C54 /* order.swift */; };
+		03F0F8601B7429D100D13C54 /* OrderCompleteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F0F85F1B7429D000D13C54 /* OrderCompleteController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -87,6 +88,7 @@
 		03EAE4B51B69CDF30004E81E /* OrderRadioController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderRadioController.swift; sourceTree = "<group>"; };
 		03ED3F071B658089000BAA38 /* chakula.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = chakula.xcdatamodel; sourceTree = "<group>"; };
 		03F0F85D1B732EE800D13C54 /* order.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = order.swift; sourceTree = "<group>"; };
+		03F0F85F1B7429D000D13C54 /* OrderCompleteController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderCompleteController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,6 +144,7 @@
 				03EAE4B31B69B6BE0004E81E /* OrderToggleOption.swift */,
 				03BD58701B5F079C00110205 /* CheckBoxLabel.swift */,
 				038A6CAC1B521889004A0034 /* Main.storyboard */,
+				03F0F85F1B7429D000D13C54 /* OrderCompleteController.swift */,
 				03F0F85D1B732EE800D13C54 /* order.swift */,
 				03E52F681B71CE1800B60826 /* UserViewController.swift */,
 				03A04B0F1B63FF5800D947CF /* UserAPIController.swift */,
@@ -318,6 +321,7 @@
 				038A6CC91B53571E004A0034 /* FeedAPIController.swift in Sources */,
 				03EAE4B21B69B2FF0004E81E /* OrderRadioOption.swift in Sources */,
 				03ED3F081B658089000BAA38 /* chakula.xcdatamodeld in Sources */,
+				03F0F8601B7429D100D13C54 /* OrderCompleteController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

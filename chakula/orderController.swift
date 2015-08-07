@@ -16,13 +16,9 @@ class OrderController: UIViewController, OrderRadioControllerProtocol {
     var unitTotal: Double = 0
     var radioControllers = [OrderRadioController]()
     var toggles = [OrderToggleOption]()
-    
     var totalPrice: Double {
         get {
             return unitTotal * quantStepper.value
-        }
-        set {
-            orderButton.titleLabel?.text = "Place Order - $\(unitTotal * quantStepper.value)"
         }
     }
     var priceChangers = [String: Double]()
@@ -51,7 +47,6 @@ class OrderController: UIViewController, OrderRadioControllerProtocol {
             priceChangers = [:]
             buildRadioOptions()
             buildToggles()
-            buildPickup()
 //             TODO: make scrollview
 //            self.scrollView.setContentOffset(CGPointMake(0, self.scrollView.contentOffset.y))
         }
@@ -126,33 +121,6 @@ class OrderController: UIViewController, OrderRadioControllerProtocol {
         }
     }
     
-    private func buildPickup(){
-        let outputFormatter = NSDateFormatter()
-        outputFormatter.dateFormat = "hh':'mm"
-        outputFormatter.locale = NSLocale(localeIdentifier: "en_US")
-        // if open data before current time, set string to "(closes \(closeString)"
-        // else (open - close)
-        let open = foodItem?.truck?.open
-        let close = foodItem?.truck?.close
-        let now = NSDate(timeIntervalSince1970: NSDate().timeIntervalSince1970)
-        let openString = outputFormatter.stringFromDate(open!)
-        let closeString = outputFormatter.stringFromDate(close!)
-        let pickUpString: String?
-        if now > open {
-            pickUpString = "Pickup (closes \(closeString))"
-        } else {
-            pickUpString = "Pickup (\(openString) - \(closeString))"
-        }
-        buildSectionLabel(pickUpString!)
-        let pickup = UIDatePicker(frame: CGRect(origin: nextViewOrigin,
-            size: CGSize(width: Int(self.contentView.frame.width), height: 60)))
-        pickup.minimumDate = foodItem!.truck!.open
-        pickup.maximumDate = foodItem!.truck!.close
-        pickup.datePickerMode = .Time
-        pickup.minuteInterval = 5
-        self.addViewToBottom(pickup)
-    }
-    
     // EVENT LISTENERS
     func toggleChanged(sender: AnyObject) {
         var priceModifier = 0.0
@@ -183,7 +151,6 @@ class OrderController: UIViewController, OrderRadioControllerProtocol {
             print("\(id) --> \(priceModifier)")
             unitTotal += priceModifier
         }
-        totalPrice = unitTotal * quantStepper.value
     }
     
     private func getRadioSelectionIds() -> [Int]{
@@ -211,8 +178,6 @@ class OrderController: UIViewController, OrderRadioControllerProtocol {
     }
     
     @IBAction func orderpressed(sender: AnyObject) {
-        let orderApi = OrderAPIController()
-        orderApi.order(self.token!, foodItem: foodItem!, toggleOptions: [2,4], radioOptions: getRadioSelectionIds(), quantity: 3, pickupTime: 44444)
     }
     
     @IBAction func stepperChanged(sender: UIStepper) {
@@ -222,21 +187,11 @@ class OrderController: UIViewController, OrderRadioControllerProtocol {
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         print("Segue coming!")
-        // if let completeOrderController = segue.destinationViewController as? OrderController {
-//        var order = Order()
-//        order.foodItem = foodItem
-//        order.quantity = Int(quantStepper.value)
-//        order.radioOptions = getRadioSelectionIds()
-//        order.toggledOptions = getToggleSelectionIds()
-//        completeOrderController.order = order
-        
-        
-//        if let orderController = segue.destinationViewController as? OrderController {
-//            let foodItemIndex = foodList!.indexPathForSelectedRow!.row
-//            orderController.foodItem = foodItems[foodItemIndex]
-//            print(userData!.sessionToken)
-//            orderController.token = userData!.sessionToken!
-//        }
+         if let completeOrderController = segue.destinationViewController as? OrderCompleteController {
+        completeOrderController.order = Order(foodItem: foodItem!, toggledOptions: getToggleSelectionIds(), radioOptions: getRadioSelectionIds(), quantity: Int(quantStepper.value), pickupTime: -1)
+        completeOrderController.token = self.token
+        completeOrderController.totalPrice = self.totalPrice
+        }
     }
 
 }
