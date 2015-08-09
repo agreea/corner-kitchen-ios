@@ -8,11 +8,12 @@
 
 import UIKit
 
-class OrderCompleteController: UIViewController {
+class OrderCompleteController: UIViewController, OrderAPIProtocol {
     var order: Order?
     var token: String?
     var totalPrice: Double?
 
+    @IBOutlet weak var errorBar: UILabel!
     @IBOutlet weak var orderButton: UIButton!
     @IBOutlet weak var locationLabel: UILabel!
     @IBOutlet weak var truckLabel: UILabel!
@@ -20,6 +21,14 @@ class OrderCompleteController: UIViewController {
     @IBOutlet weak var foodLabel: UILabel!
     @IBOutlet weak var pickUpLabel: UILabel!
     @IBOutlet weak var picker: UIDatePicker!
+    var error: String {
+        get {
+            return errorBar.text!
+        }
+        set {
+            errorBar.text! = newValue
+        }
+    }
     var foodTitle: String {
         get {
             return foodLabel.text!
@@ -55,10 +64,12 @@ class OrderCompleteController: UIViewController {
             pickUpLabel.text! = newValue
         }
     }
-    
+    var orderApi: OrderAPIController?
     override func viewDidLoad(){
         super.viewDidLoad()
         orderButton.setTitle("Place Order - $\(totalPrice!)", forState: .Normal)
+        orderApi = OrderAPIController(delegate: self)
+        print("viewDidLoad")
         if order != nil {
             setOrderTitle()
             setOrderExtras()
@@ -68,7 +79,6 @@ class OrderCompleteController: UIViewController {
             // set order extras (toggleOptions)
             // set truck name
             // set location of truck?
-            // set closing time
         } else {
             print("oh shit")
         }
@@ -78,19 +88,20 @@ class OrderCompleteController: UIViewController {
         title = "Order"
         foodTitle = (order?.foodItem?.name)!
         let radioOptions = order!.radioOptions
-        if order!.radioOptions.count > 0 {
-            var radioSubString = " ("
-            for i  in 0...radioOptions.count-1 {
-                radioSubString += "\(getRadioOptionNameForId(radioOptions[i]))"
-                if (i < radioOptions.count - 1){
-                    radioSubString += ", "
-                } else {
-                    radioSubString += ")"
-                }
-            }
-            print("Radio substring: \(radioSubString)")
-            foodTitle += radioSubString
+        if radioOptions.count < 1 {
+            return
         }
+        var radioSubString = " ("
+        for i  in 0...radioOptions.count-1 {
+            radioSubString += "\(getRadioOptionNameForId(radioOptions[i]))"
+            if (i < radioOptions.count - 1){
+                radioSubString += ", "
+            } else {
+                radioSubString += ")"
+            }
+        }
+        print("Radio substring: \(radioSubString)")
+        foodTitle += radioSubString
     }
     
     private func getRadioOptionNameForId(radioOptionId: Int) -> String {
@@ -105,8 +116,11 @@ class OrderCompleteController: UIViewController {
     }
     
     private func setOrderExtras(){
-        var extras = ""
+        extras = ""
         let toggledIds = order!.toggledOptions
+        if toggledIds.count < 1 {
+            return
+        }
         for i in 0...toggledIds.count - 1 {
             for toggleOption in order!.foodItem!.toggleOptions {
                 if toggledIds[i] == toggleOption.id {
@@ -140,13 +154,28 @@ class OrderCompleteController: UIViewController {
     }
     
     @IBAction func placeOrderWasPressed(sender: AnyObject) {
-        let orderApi = OrderAPIController()
-        let pickupTime = picker.date.timeIntervalSince1970
-        let pickupTimeInt = Int(round(pickupTime))
-        orderApi.order(self.token!, foodItem: (order?.foodItem)!, toggleOptions: (order?.toggledOptions)!, radioOptions: (order?.radioOptions)!, quantity: (order?.quantity!)!, pickupTime: pickupTimeInt)
-        print(pickupTimeInt)
+        if picker.date > order!.foodItem!.truck!.close {
+            error = "Your pickup time is after the truck closes. Please choose an earler time"
+            errorBar.hidden = false
+        }
+        else {
+            let pickupTime = picker.date.timeIntervalSince1970
+            let pickupTimeInt = Int(round(pickupTime))
+            orderApi!.order(self.token!, foodItem: (order?.foodItem)!, toggleOptions: (order?.toggledOptions)!, radioOptions: (order?.radioOptions)!, quantity: (order?.quantity!)!, pickupTime: pickupTimeInt)
+            errorBar.hidden = true
+            print(pickupTimeInt)
+        }
     }
     
+    func orderDidSucceed() {
+        // start segue to orderComplete
+        performSegueWithIdentifier("orderComplete", sender: nil)
+    }
+    
+    func orderDidFail() {
+        error = "We couldn't process your order. Please try again"
+        errorBar.hidden = false
+    }
     /*
     
     // completeOrderPressed --> placeOrder(order)

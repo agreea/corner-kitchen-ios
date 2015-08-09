@@ -100,10 +100,11 @@ class OrderController: UIViewController, OrderRadioControllerProtocol {
     }
     
     private func buildToggles(){
+        if foodItem!.toggleOptions.count == 0 {
+            return
+        }
         buildSectionLabel("Extras")
         for toggleOption in foodItem!.toggleOptions {
-            // make a new button with a new associated option
-         // let toggleOption: (name: String, priceDiff: Double, id: Int)
             let (name, priceDiff, id) = toggleOption
             let button = OrderToggleOption(name: name, id: id, priceDiff: priceDiff, frame:  CGRectMake(self.nextViewOrigin.x, self.nextViewOrigin.y + 8, 160, 24), fontSize: quantLabel.font.pointSize)
             var optionName = "  " + name

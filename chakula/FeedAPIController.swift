@@ -26,24 +26,17 @@ class FeedAPIController: APICallback {
         self.foodItems = [FoodItem]()
         self.delegate = delegate
     }
-    func updateLocation(coord: CLLocationCoordinate2D){
-        if self.coord == nil {
-            self.coord = coord
-            findFood()
-        }
+    func findFoodNear(coord: CLLocationCoordinate2D){
         self.coord = coord
-    }
-    func findFood(){
-        if coord != nil {
-            query(API.METHOD_FINDTRUCK)
-        } else {
-            delegate.queryFailed()
-        }
+        print("calling query from findFoodnear")
+        query(API.METHOD_FINDTRUCK)
     }
 
-    private func query(method: String) {
+    private func query(method: String){
+        print("query called")
         let (fromTime, untilTime) = getTimeRange()
         let postString = "lat=\(coord!.latitude)&lon=\(coord!.longitude)&radius=1000000&open_from=\(fromTime)&open_til=\(untilTime)"
+        print(postString)
         API().post(API.buildRequest(API.URL_TRUCK, method: method, postString: postString), callback: self, method: method)
     }
     

@@ -19,13 +19,14 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
         if you don't have the last known location, show an error message (?)
     */
     var manager: CLLocationManager!
-    var currentCoord: CLLocationCoordinate2D!
+    var currentCoords: CLLocationCoordinate2D?
     // Registration and Login interface components
     var userApi: UserAPIController!
     var userData: UserData?
     var refreshControl:UIRefreshControl!
     
     var foodItems = [FoodItem]()
+    var truckAddresses = [Int : String]()
     let kCellIdentifier: String = "foodCell"
     var feedApi : FeedAPIController!
     @IBOutlet weak var foodList: UITableView!
@@ -35,16 +36,24 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("About to invoke feedAPI")
         feedApi = FeedAPIController(delegate: self)
-        print("About to invoke userAPI")
         userApi = UserAPIController()
         userData = userApi.getUserData()
-        print("About to invoke location manager")
+        self.navigationItem.setHidesBackButton(true, animated:true)
+        setupRefresh()
+        locateUserAndFood()
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+    }
+    
+    private func setupRefresh() {
         self.refreshControl = UIRefreshControl()
         self.refreshControl.attributedTitle = NSAttributedString(string: "Refreshing")
         self.refreshControl.addTarget(self, action: "refresh:", forControlEvents: UIControlEvents.ValueChanged)
+        self.refreshControl.layer.zPosition = -50
         self.foodList.addSubview(refreshControl)
+    }
+    
+    private func locateUserAndFood(){
         manager = CLLocationManager()
         if #available(iOS 8.0, *) {
             manager.requestWhenInUseAuthorization()
@@ -53,18 +62,16 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         manager.delegate = self
         manager.desiredAccuracy = kCLLocationAccuracyBest
-        manager.startUpdatingLocation()
-        print("session manager handled")
-
-        print("firstname lastname password handled")
-
-        outputFormatter.dateFormat = "hh':'mm"
-        outputFormatter.locale = NSLocale(localeIdentifier: "en_US")
-        print("setup titles handled")
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        feedApi.findFood()
+        if currentCoords == nil {
+            manager.startUpdatingLocation()
+            print("updating location now")
+        } else {
+            getAddressFor(currentCoords!){ address -> Void in
+                self.title = "Near \(address)"
+            }
+            feedApi.findFoodNear(currentCoords!)
+        }
     }
-    
     override func viewDidLayoutSubviews(){
         super.viewDidLayoutSubviews()
 //        for cell in self.foodList.visibleCells as! [FoodFeedCell] {
@@ -79,38 +86,82 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
 //        }
     }
     
-    func locationManager(manager: CLLocationManager,
-        didUpdateLocations locations: [CLLocation]){
-        let location = locations.last as CLLocation!
-        feedApi.updateLocation(location.coordinate)
-        print(location)
+    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]){
+        print("got a location")
+        if let location = locations.last {
+            print("location was last")
+            currentCoords = location.coordinate
+            print("Coords have been set")
+            feedApi.findFoodNear(currentCoords!)
+            print("Called Feed Api")
+            manager.stopUpdatingLocation()
+            getAddressFor(currentCoords!){ address -> Void in
+                self.title = "Near \(address)"
+            }
+        }
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
+    func getAddressFor(coord: CLLocationCoordinate2D, callback: (String) -> Void) {
+        let location = CLLocation(latitude: coord.latitude, longitude: coord.longitude)
+        CLGeocoder().reverseGeocodeLocation(location, completionHandler: {(placemarks, error) -> Void in
+            if error != nil {
+                print("Reverse geocoder failed with error" + error!.localizedDescription)
+                return
+            }
+            if placemarks!.count > 0 {
+                print("got to placemarks")
+                let pm = placemarks![0] as CLPlacemark
+                if let addressDict = pm.addressDictionary as Dictionary?,
+                    streetAddress = addressDict["Street"] as! String?{
+                        callback(streetAddress)
+                } else {
+                    self.title = pm.name!
+                }
+            } else {
+                print("Problem with the data received from geocoder")
+            }
+        })
     }
-    
+
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
     
     }
     
     func refresh(sender:AnyObject) {
-        feedApi.findFood()
+        if currentCoords != nil {
+            feedApi.findFoodNear(currentCoords!)
+        } else {
+            // TODO: Show location error
+        }
     }
     
     func didReceiveAPIResults(foodItems: [FoodItem]) {
         print("FOOD ITEMS SIZE: \(foodItems.count)")
+        outputFormatter.dateFormat = "hh':'mm"
+        outputFormatter.locale = NSLocale(localeIdentifier: "en_US")
         dispatch_async(dispatch_get_main_queue(), {
             self.foodItems = foodItems
             if(self.foodItems.count != 0) {
                 self.foodList!.reloadData()
             }
+            self.buildAddresses()
             UIApplication.sharedApplication().networkActivityIndicatorVisible = false
             self.refreshControl.endRefreshing()
         })
 
     }
     
+    func buildAddresses() {
+        for foodItem in foodItems {
+            let truck = foodItem.truck
+            if truckAddresses[truck!.id] == nil {
+                let truckCoord = CLLocationCoordinate2D(latitude: truck!.lat, longitude: truck!.lon)
+                getAddressFor(truckCoord){ address -> Void in
+                    self.truckAddresses[truck!.id] = address
+                }
+            }
+        }
+    }
     func queryFailed(){
         dispatch_async(dispatch_get_main_queue(), {
                 // TODO: Show error message on feed
@@ -119,7 +170,10 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
             self.refreshControl.endRefreshing()
         })
     }
-    
+    func queryFailedNoLocation(){
+        self.setFeedMessage("We couldn't locate you. 😕 Set your location using the map button at the top right")
+
+    }
     func setFeedMessage(message: String){
         let messageLabel = UILabel(frame: CGRectMake(30, 0, self.foodList.bounds.size.width - 30, self.foodList.bounds.size.height))
         messageLabel.text = message
@@ -133,7 +187,7 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
         if (foodItems.count != 0) {
             foodList.separatorStyle = UITableViewCellSeparatorStyle.SingleLine;
         } else {
-            setFeedMessage("Couldn't find any food nearby :/")
+            setFeedMessage("Couldn't find any food nearby 😔")
         }
         
         return foodItems.count
@@ -141,29 +195,25 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let (cell, imgURL) = setUpCell(tableView, indexPath: indexPath)
-        print("Entered TableView")
         if let img = self.imgCache[imgURL] {
-            print("adding image to cache")
             cell.foodImage!.image = img
         } else if let url = NSURL(string: imgURL){
             let request = NSURLRequest(URL: url)
-            print("Entered TableView first else")
-            print("imgURL: \(imgURL)")
             let mainQueue = NSOperationQueue.mainQueue()
-            print("About to enter the asnc request")
             NSURLConnection.sendAsynchronousRequest(request, queue: mainQueue, completionHandler: { (response, data, error) -> Void in
                 if error == nil {
-                    print("Got to the async request completion!")
-                    let image = UIImage(data: data!)
-                    self.imgCache[imgURL] = image
+                    let toImage = UIImage(data: data!)
+                    self.imgCache[imgURL] = toImage
                     dispatch_async(dispatch_get_main_queue(), {
                         if let cellToUpdate = tableView.cellForRowAtIndexPath(indexPath) as? FoodFeedCell {
-                            print("Got 'Cell to update!'")
-                                cellToUpdate.foodImage!.image = image
+                            UIView.transitionWithView(cellToUpdate.foodImage!,
+                                duration:0.7,
+                                options: UIViewAnimationOptions.TransitionCrossDissolve,
+                                animations: { cellToUpdate.foodImage!.image = toImage },
+                                completion: nil)
                             }
                         })
                     } else {
-                        print("found error")
                         print("Error: \(error!.localizedDescription)")
                     }
                 })
@@ -172,27 +222,32 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     private func setUpCell(tableView: UITableView, indexPath: NSIndexPath) -> (FoodFeedCell, String) {
-        print("In set up cell")
         let cell: FoodFeedCell = tableView.dequeueReusableCellWithIdentifier(kCellIdentifier) as! FoodFeedCell
         let foodItem = self.foodItems[indexPath.row]
         cell.foodTitle?.text = foodItem.name!
         cell.foodPrice?.text = "$\(foodItem.price!)"
-        cell.foodImage?.image = UIImage(named: "pacman.png")
+        cell.foodImage?.image = UIImage(named: "loading")
         cell.truckName?.text = foodItem.truck!.name
+        cell.truckName?.sizeToFit()
         if foodItem.truck!.dist < 0.1 {
             cell.distance?.text = "here!"
+            cell.distance?.textColor = UIColor.blackColor()
+            cell.distance?.sizeToFit()
+        } else if let truckAddress = truckAddresses[foodItem.truck!.id] {
+            cell.distance?.text = truckAddress
+            cell.distance?.textColor = UIColor.blackColor()
+            cell.distance?.sizeToFit()
         } else {
-            cell.distance?.text = "\(foodItem.truck!.dist)mi"
+            let coord = CLLocationCoordinate2D(latitude: foodItem.truck!.lat, longitude: foodItem.truck!.lon)
+            getAddressFor(coord){ address -> Void in
+                cell.distance?.text = address
+                cell.distance?.textColor = UIColor.blackColor()
+                cell.distance?.sizeToFit()
+            }
         }
-//        cell.truckName?.translatesAutoresizingMaskIntoConstraints
-//        cell.truckName?.sizeToFit()
-        print("width: \(cell.truckName.frame.width)")
-        print("size: \(cell.truckName.frame.size)")
-        print("origin: \(cell.truckName.frame.origin)")
         let openString = outputFormatter.stringFromDate(foodItem.truck!.open)
         let closeString = outputFormatter.stringFromDate(foodItem.truck!.close)
         cell.pickupRange?.text = "\(openString) - \(closeString)"
-        print("Leaving set up cell")
         return (cell, foodItem.imgURL!)
     }
     
@@ -206,11 +261,13 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         print("Segue coming!")
-        if let orderController: OrderController = segue.destinationViewController as? OrderController {
+        if let orderController = segue.destinationViewController as? OrderController {
             let foodItemIndex = foodList!.indexPathForSelectedRow!.row
             orderController.foodItem = foodItems[foodItemIndex]
             print(userData!.sessionToken)
             orderController.token = userData!.sessionToken!
+        } else if let locationViewController = segue.destinationViewController as? LocationViewController {
+            locationViewController.receivedLocation = currentCoords
         }
     }
 }

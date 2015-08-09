@@ -7,12 +7,18 @@
 //
 
 import Foundation
-
+protocol OrderAPIProtocol {
+    func orderDidSucceed()
+    func orderDidFail()
+}
 class OrderAPIController: APICallback {
     // order
     // handle order results
     // delegate: orderSuccess, orderFailure
-    init(){
+    var delegate: OrderAPIProtocol
+    
+    init(delegate: OrderAPIProtocol){
+        self.delegate = delegate
     }
     
     func order(token: String, foodItem: FoodItem, toggleOptions:[Int], radioOptions:[Int], quantity: Int, pickupTime: Int) {
@@ -32,11 +38,11 @@ class OrderAPIController: APICallback {
     }
     
     func resultDidReturn(jsonResult: NSDictionary, method: String) {
-        print(jsonResult)
+        delegate.orderDidSucceed()
     }
     
     func errorDidReturn(error: ErrorType, method: String) {
-        //
+        delegate.orderDidFail()
     }
 
     
