@@ -17,6 +17,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        Mixpanel.sharedInstanceWithToken("a1c8e9848951e688d5df9055606fa143")
+        let mixpanel = Mixpanel.sharedInstance()
+        mixpanel.track("App launched")
+        print("In application")
         return true
     }
     
@@ -65,7 +69,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let url = self.applicationDocumentsDirectory.URLByAppendingPathComponent("SingleViewCoreData.sqlite")
         var failureReason = "There was an error creating or loading the application's saved data."
         do {
-            try coordinator.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: url, options: nil)
+            let mOptions = [NSMigratePersistentStoresAutomaticallyOption: true,
+                NSInferMappingModelAutomaticallyOption: true]
+
+            try coordinator.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: url, options: mOptions)
         } catch {
             // Report any error we got.
             var dict = [String: AnyObject]()

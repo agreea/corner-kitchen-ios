@@ -17,5 +17,5 @@ extension UserData {
     @NSManaged var firstName: String?
     @NSManaged var lastName: String?
     @NSManaged var sessionToken: String?
-
+    @NSManaged var id: NSNumber?
 }

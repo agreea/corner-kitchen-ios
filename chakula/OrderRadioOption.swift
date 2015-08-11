@@ -14,7 +14,11 @@ class OrderRadioOption: SSRadioButton {
     
     init(name: String, id: Int, priceDiff: Double, frame: CGRect, fontSize: CGFloat){
         super.init(frame: frame)
-        setTitle("  " + name + " + $\(priceDiff)", forState: UIControlState.Normal)
+        var title = "  " + name
+        if priceDiff > 0 {
+            title += " + $\(priceDiff)"
+        }
+        setTitle(title, forState: UIControlState.Normal)
         contentHorizontalAlignment = UIControlContentHorizontalAlignment.Left
         titleLabel!.font =  UIFont(name: titleLabel!.font.fontName,
             size: fontSize)

@@ -28,14 +28,15 @@ class OrderController: UIViewController, OrderRadioControllerProtocol {
     @IBOutlet weak var quantStepper: UIStepper!
     @IBOutlet weak var quantLabel: UILabel!
     @IBOutlet weak var orderButton: UIButton!
-
+    let mix = Mixpanel.sharedInstance()
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
-    // BUILD-UI CODE
     override func viewDidLoad() {
         super.viewDidLoad()
         if foodItem != nil {
+            print("got to view did load")
             self.title = foodItem!.name!
             unitTotal = Double((foodItem?.price)!)
             descriptionLabel?.lineBreakMode = .ByWordWrapping
@@ -47,8 +48,6 @@ class OrderController: UIViewController, OrderRadioControllerProtocol {
             priceChangers = [:]
             buildRadioOptions()
             buildToggles()
-//             TODO: make scrollview
-//            self.scrollView.setContentOffset(CGPointMake(0, self.scrollView.contentOffset.y))
         }
     }
     
@@ -91,7 +90,7 @@ class OrderController: UIViewController, OrderRadioControllerProtocol {
         let radioController = OrderRadioController(delegate: self, name: radioOption.familyName)
         for choice in radioOption.choices {
             let (name, priceDiff, id) = choice
-            let button = OrderRadioOption(name: name, id: id, priceDiff: priceDiff, frame: CGRectMake(self.nextViewOrigin.x, self.nextViewOrigin.y + 8, 160, 24), fontSize: quantLabel.font.pointSize)
+            let button = OrderRadioOption(name: name, id: id, priceDiff: priceDiff, frame: CGRectMake(self.nextViewOrigin.x, self.nextViewOrigin.y + 16, 160, 24), fontSize: quantLabel.font.pointSize)
             addViewToBottom(button)
             radioController.addButton(button)
         }
@@ -106,7 +105,7 @@ class OrderController: UIViewController, OrderRadioControllerProtocol {
         buildSectionLabel("Extras")
         for toggleOption in foodItem!.toggleOptions {
             let (name, priceDiff, id) = toggleOption
-            let button = OrderToggleOption(name: name, id: id, priceDiff: priceDiff, frame:  CGRectMake(self.nextViewOrigin.x, self.nextViewOrigin.y + 8, 160, 24), fontSize: quantLabel.font.pointSize)
+            let button = OrderToggleOption(name: name, id: id, priceDiff: priceDiff, frame:  CGRectMake(self.nextViewOrigin.x, self.nextViewOrigin.y + 16, 160, 24), fontSize: quantLabel.font.pointSize)
             var optionName = "  " + name
             if priceDiff > 0 {
                 optionName += " + $\(priceDiff)"
@@ -188,10 +187,15 @@ class OrderController: UIViewController, OrderRadioControllerProtocol {
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         print("Segue coming!")
-         if let completeOrderController = segue.destinationViewController as? OrderCompleteController {
-        completeOrderController.order = Order(foodItem: foodItem!, toggledOptions: getToggleSelectionIds(), radioOptions: getRadioSelectionIds(), quantity: Int(quantStepper.value), pickupTime: -1)
-        completeOrderController.token = self.token
-        completeOrderController.totalPrice = self.totalPrice
+        if let completeOrderController = segue.destinationViewController as? OrderCompleteController {
+            completeOrderController.order = Order(foodItem: foodItem!, toggledOptions: getToggleSelectionIds(), radioOptions: getRadioSelectionIds(), quantity: Int(quantStepper.value), pickupTime: -1)
+            completeOrderController.token = self.token
+            completeOrderController.totalPrice = self.totalPrice
+            let userData = UserAPIController().getUserData()
+            var mixProps = [String : String]()
+            mixProps[MixKeys.USER_ID] = "\(userData!.id!)"
+            mixProps[MixKeys.FOOD_ID] = "\(foodItem!.id!)"
+            mix.track(MixKeys.EVENT.COMPLETE_ORDER, properties: mixProps)
         }
     }
 

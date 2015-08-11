@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreLocation
 
 class OrderCompleteController: UIViewController, OrderAPIProtocol {
     var order: Order?
@@ -55,7 +56,15 @@ class OrderCompleteController: UIViewController, OrderAPIProtocol {
             truckLabel.text! = newValue
         }
     }
-    
+    var location: String {
+        get {
+            return locationLabel.text!
+        }
+        set {
+            locationLabel.text! = newValue
+        }
+    }
+
     var pickup: String {
         get {
             return pickUpLabel.text!
@@ -64,6 +73,7 @@ class OrderCompleteController: UIViewController, OrderAPIProtocol {
             pickUpLabel.text! = newValue
         }
     }
+    
     var orderApi: OrderAPIController?
     override func viewDidLoad(){
         super.viewDidLoad()
@@ -75,6 +85,7 @@ class OrderCompleteController: UIViewController, OrderAPIProtocol {
             setOrderExtras()
             truckName = (order?.foodItem?.truck?.name)!
             setupPickup()
+            setLocation()
             // set order title [DONE]
             // set order extras (toggleOptions)
             // set truck name
@@ -132,7 +143,29 @@ class OrderCompleteController: UIViewController, OrderAPIProtocol {
             }
         }
     }
-    
+    private func setLocation(){
+        let location = CLLocation(latitude: (order?.foodItem?.truck?.lat)!,
+                                    longitude: (order?.foodItem?.truck?.lon)!)
+        CLGeocoder().reverseGeocodeLocation(location, completionHandler: {(placemarks, error) -> Void in
+            if error != nil {
+                print("Reverse geocoder failed with error" + error!.localizedDescription)
+                return
+            }
+            if placemarks!.count > 0 {
+                print("got to placemarks")
+                let pm = placemarks![0] as CLPlacemark
+                if let addressDict = pm.addressDictionary as Dictionary?,
+                    streetAddress = addressDict["Street"] as! String?{
+                        self.location = streetAddress
+                } else {
+                    self.location = pm.name!
+                }
+            } else {
+                print("Problem with the data received from geocoder")
+            }
+        })
+
+    }
     private func setupPickup(){
         let outputFormatter = NSDateFormatter()
         outputFormatter.dateFormat = "hh':'mm"
@@ -169,6 +202,10 @@ class OrderCompleteController: UIViewController, OrderAPIProtocol {
     
     func orderDidSucceed() {
         // start segue to orderComplete
+        var mixProps = [String : String]()
+        mixProps[MixKeys.USER_ID] = "\(UserAPIController().getUserData()!.id!)"
+        mixProps[MixKeys.FOOD_ID] = "\(order!.foodItem!.id!)"
+        Mixpanel.sharedInstance().track(MixKeys.EVENT.ORDER_PLACE, properties: mixProps)
         performSegueWithIdentifier("orderComplete", sender: nil)
     }
     

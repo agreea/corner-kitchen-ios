@@ -25,6 +25,8 @@ class UserAPIController: APICallback{
     var sessionToken: String?
     var delegate: UserAPIProtocol?
     let managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext
+    let mixpanel = Mixpanel.sharedInstance()
+
     init(){}
     init(delegate: UserAPIProtocol){
         self.delegate = delegate
@@ -35,6 +37,7 @@ class UserAPIController: APICallback{
         switch method {
         case API.METHOD_REGISTER:
             handleRegisterResult(result)
+            mixpanel.track("registered")
             break
         case API.METHOD_VERIFY:
             handleVerifyResult(result)
@@ -81,18 +84,23 @@ class UserAPIController: APICallback{
     private func handleRegisterResult(result: NSDictionary){
         if result[API.RESULT_SUCCESS] as! Int == 1 {
             delegate?.registerResult("\(result[API.RESULT_BODY]!)", didSucceed: true)
+            mixpanel.track("registered")
         } else {
             delegate?.registerResult("\(result[API.RESULT_ERROR]!)", didSucceed: false)
+            mixpanel.track("reg fail")
         }
     }
     
     private func handleTokenResult(result: NSDictionary){
+        print(result)
         if result[API.RESULT_SUCCESS] as! Int == 1 {
             if let resultBody = result[API.RESULT_BODY] as? NSDictionary,
                 sessionToken = resultBody[API.USER.SESSION_TOKEN] as? String,
                 firstName = resultBody[API.USER.FIRST_NAME] as? String,
-                lastName = resultBody[API.USER.LAST_NAME] as? String {
-                writeUserEntity(firstName, lastName: lastName, sessionToken: sessionToken)
+                lastName = resultBody[API.USER.LAST_NAME] as? String,
+                id = resultBody[API.USER.ID] as? Int {
+                    mixpanel.track("verified/logged", properties: ["Id": id])
+                    writeUserEntity(firstName, lastName: lastName, sessionToken: sessionToken, id: id)
             }
             print(sessionToken)
         } else {
@@ -100,10 +108,10 @@ class UserAPIController: APICallback{
         }
     }
     
-    private func writeUserEntity(firstName: String, lastName: String, sessionToken: String){
+    private func writeUserEntity(firstName: String, lastName: String, sessionToken: String, id: Int) {
         UserData.newEntry(managedObjectContext,
             firstName: firstName, lastName: lastName,
-            sessionToken: sessionToken)
+            sessionToken: sessionToken, id: id)
         UserData.save(managedObjectContext)
         delegate?.verifyResult("Success!", didSucceed: true)
     }

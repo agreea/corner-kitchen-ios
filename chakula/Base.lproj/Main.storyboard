@@ -775,7 +775,8 @@
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Success!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sku-nM-P5d">
                                 <rect key="frame" x="203" y="72" width="195" height="21"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="195" id="5fu-gh-rcc"/>
+                                    <constraint firstAttribute="height" constant="21" id="Pvf-29-JFO"/>
+                                    <constraint firstAttribute="width" constant="195" id="QJJ-YN-dK2"/>
                                     <constraint firstAttribute="height" constant="65" id="TGz-vr-1u8"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="28"/>
@@ -802,30 +803,17 @@
                                     </mask>
                                 </variation>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Thank you for using Chakula's beta. Please excuse our rough edges as we find our bearings 😊" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tE5-Vt-ad6">
-                                <rect key="frame" x="27" y="289" width="553" height="92"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="92" id="2cZ-nh-VD3"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="VWs-qf-TBe" firstAttribute="top" secondItem="Sku-nM-P5d" secondAttribute="bottom" constant="8" symbolic="YES" id="5EF-NF-sHc"/>
                             <constraint firstItem="VWs-qf-TBe" firstAttribute="trailing" secondItem="ARW-4c-3un" secondAttribute="trailingMargin" id="BTb-qc-ZGs"/>
                             <constraint firstItem="bUk-KM-e04" firstAttribute="bottom" secondItem="vW4-L3-qQ0" secondAttribute="top" id="E5c-pP-GVY"/>
-                            <constraint firstItem="tE5-Vt-ad6" firstAttribute="leading" secondItem="VWs-qf-TBe" secondAttribute="leading" id="MwL-gy-hct"/>
-                            <constraint firstItem="Sku-nM-P5d" firstAttribute="centerX" secondItem="bUk-KM-e04" secondAttribute="centerX" id="NyA-ZR-Rhb"/>
+                            <constraint firstItem="VWs-qf-TBe" firstAttribute="top" secondItem="Sku-nM-P5d" secondAttribute="bottom" constant="8" symbolic="YES" id="EJO-k0-nSh"/>
+                            <constraint firstItem="Sku-nM-P5d" firstAttribute="centerX" secondItem="bUk-KM-e04" secondAttribute="centerX" id="IDA-Rx-ZWn"/>
                             <constraint firstItem="bUk-KM-e04" firstAttribute="width" secondItem="ARW-4c-3un" secondAttribute="width" id="QQx-97-VON"/>
-                            <constraint firstItem="Sku-nM-P5d" firstAttribute="top" secondItem="CKx-r0-8ss" secondAttribute="bottom" constant="8" symbolic="YES" id="Rml-x7-dLJ"/>
-                            <constraint firstItem="tE5-Vt-ad6" firstAttribute="top" secondItem="VWs-qf-TBe" secondAttribute="bottom" constant="37" id="bXx-iB-XcT"/>
+                            <constraint firstItem="Sku-nM-P5d" firstAttribute="top" secondItem="CKx-r0-8ss" secondAttribute="bottom" constant="52" id="ZaF-fv-6TP"/>
                             <constraint firstItem="bUk-KM-e04" firstAttribute="centerX" secondItem="ARW-4c-3un" secondAttribute="centerX" id="itU-hL-sES"/>
-                            <constraint firstItem="tE5-Vt-ad6" firstAttribute="trailing" secondItem="VWs-qf-TBe" secondAttribute="trailing" id="rKf-az-jn1"/>
                             <constraint firstItem="VWs-qf-TBe" firstAttribute="leading" secondItem="ARW-4c-3un" secondAttribute="leadingMargin" constant="7" id="ry5-oG-f8k"/>
-                            <constraint firstItem="tE5-Vt-ad6" firstAttribute="top" secondItem="ARW-4c-3un" secondAttribute="top" constant="289" id="yY1-zR-gZr"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -856,6 +844,6 @@
         <image name="to-location.png" width="30" height="30"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="IuG-xc-1G8"/>
+        <segue reference="RWF-Dk-FyA"/>
     </inferredMetricsTieBreakers>
 </document>

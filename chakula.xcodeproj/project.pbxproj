@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		0315D7A91B5CB53500656F85 /* RadioOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0315D7A81B5CB53500656F85 /* RadioOption.swift */; };
+		0378F51F1B773BBB00420EAC /* MixKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0378F51E1B773BBB00420EAC /* MixKeys.swift */; };
+		0378F5211B77F93100420EAC /* chakula-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 0378F5201B77F92F00420EAC /* chakula-logo.png */; };
+		0378F5231B783BC900420EAC /* chakula-logo-no-bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 0378F5221B783BC900420EAC /* chakula-logo-no-bg.png */; };
+		0378F5251B78559E00420EAC /* no-pic-yet.png in Resources */ = {isa = PBXBuildFile; fileRef = 0378F5241B78559E00420EAC /* no-pic-yet.png */; };
+		0378F5271B79758500420EAC /* launch_screen.png in Resources */ = {isa = PBXBuildFile; fileRef = 0378F5261B79758500420EAC /* launch_screen.png */; };
 		038A6CA91B521889004A0034 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038A6CA81B521889004A0034 /* AppDelegate.swift */; };
 		038A6CAB1B521889004A0034 /* FoodFeedController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038A6CAA1B521889004A0034 /* FoodFeedController.swift */; };
 		038A6CAE1B521889004A0034 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 038A6CAC1B521889004A0034 /* Main.storyboard */; };
@@ -42,6 +47,7 @@
 		03ED3F081B658089000BAA38 /* chakula.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 03ED3F061B658089000BAA38 /* chakula.xcdatamodeld */; };
 		03F0F85E1B732EE800D13C54 /* order.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F0F85D1B732EE800D13C54 /* order.swift */; };
 		03F0F8601B7429D100D13C54 /* OrderCompleteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F0F85F1B7429D000D13C54 /* OrderCompleteController.swift */; };
+		F60F9533D7286C91BDE001CF /* libPods-chakula.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74A940F972BF246E63F13846 /* libPods-chakula.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +62,13 @@
 
 /* Begin PBXFileReference section */
 		0315D7A81B5CB53500656F85 /* RadioOption.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadioOption.swift; sourceTree = "<group>"; };
+		0378F51C1B77141600420EAC /* Mixpanel-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Mixpanel-Bridging-Header.h"; sourceTree = "<group>"; };
+		0378F51D1B772B7800420EAC /* chakula 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "chakula 3.xcdatamodel"; sourceTree = "<group>"; };
+		0378F51E1B773BBB00420EAC /* MixKeys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MixKeys.swift; sourceTree = "<group>"; };
+		0378F5201B77F92F00420EAC /* chakula-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "chakula-logo.png"; path = "../../../My Pictures/Art/Chakula/chakula-logo.png"; sourceTree = "<group>"; };
+		0378F5221B783BC900420EAC /* chakula-logo-no-bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "chakula-logo-no-bg.png"; path = "../../../My Pictures/Art/Chakula/chakula-logo-no-bg.png"; sourceTree = "<group>"; };
+		0378F5241B78559E00420EAC /* no-pic-yet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "no-pic-yet.png"; path = "../../../My Pictures/Art/Chakula/no-pic-yet.png"; sourceTree = "<group>"; };
+		0378F5261B79758500420EAC /* launch_screen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = launch_screen.png; path = ../../launch_screen.png; sourceTree = "<group>"; };
 		038A6CA31B521889004A0034 /* chakula.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = chakula.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		038A6CA71B521889004A0034 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		038A6CA81B521889004A0034 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -95,6 +108,9 @@
 		03ED3F071B658089000BAA38 /* chakula.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = chakula.xcdatamodel; sourceTree = "<group>"; };
 		03F0F85D1B732EE800D13C54 /* order.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = order.swift; sourceTree = "<group>"; };
 		03F0F85F1B7429D000D13C54 /* OrderCompleteController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderCompleteController.swift; sourceTree = "<group>"; };
+		224A0CAE872D0645ACABC19E /* Pods-chakula.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-chakula.debug.xcconfig"; path = "Pods/Target Support Files/Pods-chakula/Pods-chakula.debug.xcconfig"; sourceTree = "<group>"; };
+		74A940F972BF246E63F13846 /* libPods-chakula.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-chakula.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8F8BA320D46E552479B6E6D5 /* Pods-chakula.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-chakula.release.xcconfig"; path = "Pods/Target Support Files/Pods-chakula/Pods-chakula.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +118,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F60F9533D7286C91BDE001CF /* libPods-chakula.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -118,11 +135,15 @@
 		038A6C9A1B521889004A0034 = {
 			isa = PBXGroup;
 			children = (
+				0378F5261B79758500420EAC /* launch_screen.png */,
+				0378F51C1B77141600420EAC /* Mixpanel-Bridging-Header.h */,
 				03E1D5721B66F890009A55CA /* UserData+CoreDataProperties.swift */,
 				03E1D5731B66F890009A55CA /* UserData.swift */,
 				038A6CA51B521889004A0034 /* chakula */,
 				038A6CBB1B521889004A0034 /* chakulaTests */,
 				038A6CA41B521889004A0034 /* Products */,
+				5AABC403ACED280A0A8B524C /* Pods */,
+				DF62E20DB6AD9C16A68C83D2 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -156,8 +177,11 @@
 		038A6CA61B521889004A0034 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				0378F5241B78559E00420EAC /* no-pic-yet.png */,
+				0378F5221B783BC900420EAC /* chakula-logo-no-bg.png */,
 				03BC44AF1B75CDDB007D66F1 /* chakula-map-marker.png */,
 				03BC44B31B76D189007D66F1 /* loading.png */,
+				0378F5201B77F92F00420EAC /* chakula-logo.png */,
 				03BD586C1B5F043800110205 /* checked.png */,
 				03BC44B11B768559007D66F1 /* to-location.png */,
 				03BD586D1B5F043800110205 /* unchecked.png */,
@@ -228,8 +252,26 @@
 				03A04B111B64008500D947CF /* API.swift */,
 				038A6CCE1B548237004A0034 /* truck.swift */,
 				03F0F85D1B732EE800D13C54 /* order.swift */,
+				0378F51E1B773BBB00420EAC /* MixKeys.swift */,
 			);
 			name = Data;
+			sourceTree = "<group>";
+		};
+		5AABC403ACED280A0A8B524C /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				224A0CAE872D0645ACABC19E /* Pods-chakula.debug.xcconfig */,
+				8F8BA320D46E552479B6E6D5 /* Pods-chakula.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		DF62E20DB6AD9C16A68C83D2 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				74A940F972BF246E63F13846 /* libPods-chakula.a */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -239,9 +281,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 038A6CC21B521889004A0034 /* Build configuration list for PBXNativeTarget "chakula" */;
 			buildPhases = (
+				0F0A5775AFEF34BA5ADC3C9C /* Check Pods Manifest.lock */,
 				038A6C9F1B521889004A0034 /* Sources */,
 				038A6CA01B521889004A0034 /* Frameworks */,
 				038A6CA11B521889004A0034 /* Resources */,
+				9FDE4385595F46EEA9C13009 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -283,7 +327,15 @@
 				TargetAttributes = {
 					038A6CA21B521889004A0034 = {
 						CreatedOnToolsVersion = 6.4;
-						DevelopmentTeam = UV52Y22TU7;
+						DevelopmentTeam = E8NKN3KC6L;
+						SystemCapabilities = {
+							com.apple.DataProtection = {
+								enabled = 1;
+							};
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 					038A6CB71B521889004A0034 = {
 						CreatedOnToolsVersion = 6.4;
@@ -316,6 +368,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				03BC44B41B76D189007D66F1 /* loading.png in Resources */,
+				0378F5231B783BC900420EAC /* chakula-logo-no-bg.png in Resources */,
 				03BD586E1B5F043800110205 /* checked.png in Resources */,
 				038A6CAE1B521889004A0034 /* Main.storyboard in Resources */,
 				038A6CCB1B53920E004A0034 /* pacman.png in Resources */,
@@ -323,6 +376,9 @@
 				038A6CB31B521889004A0034 /* LaunchScreen.xib in Resources */,
 				03BD586F1B5F043800110205 /* unchecked.png in Resources */,
 				038A6CB01B521889004A0034 /* Images.xcassets in Resources */,
+				0378F5271B79758500420EAC /* launch_screen.png in Resources */,
+				0378F5211B77F93100420EAC /* chakula-logo.png in Resources */,
+				0378F5251B78559E00420EAC /* no-pic-yet.png in Resources */,
 				03BC44B01B75CDDB007D66F1 /* chakula-map-marker.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -335,6 +391,39 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		0F0A5775AFEF34BA5ADC3C9C /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		9FDE4385595F46EEA9C13009 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-chakula/Pods-chakula-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		038A6C9F1B521889004A0034 /* Sources */ = {
@@ -354,6 +443,7 @@
 				03E1D5741B66F890009A55CA /* UserData+CoreDataProperties.swift in Sources */,
 				03BD586B1B5DD5EE00110205 /* SSRadioButtonController.swift in Sources */,
 				03A04B101B63FF5900D947CF /* UserAPIController.swift in Sources */,
+				0378F51F1B773BBB00420EAC /* MixKeys.swift in Sources */,
 				03A04B121B64008500D947CF /* API.swift in Sources */,
 				03EAE4AE1B689A250004E81E /* NSDateExtension.swift in Sources */,
 				03BD58691B5DD53900110205 /* SSRadioButton.swift in Sources */,
@@ -493,31 +583,37 @@
 		};
 		038A6CC31B521889004A0034 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 224A0CAE872D0645ACABC19E /* Pods-chakula.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = chakula/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "corner-kitchen.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.yaychakula.chakula;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "/Users/agreeahmed/Documents/Repos/chakula/Mixpanel-Bridging-Header.h";
 			};
 			name = Debug;
 		};
 		038A6CC41B521889004A0034 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8F8BA320D46E552479B6E6D5 /* Pods-chakula.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = chakula/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "corner-kitchen.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.yaychakula.chakula;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "/Users/agreeahmed/Documents/Repos/chakula/Mixpanel-Bridging-Header.h";
 			};
 			name = Release;
 		};
@@ -593,10 +689,11 @@
 		03ED3F061B658089000BAA38 /* chakula.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				0378F51D1B772B7800420EAC /* chakula 3.xcdatamodel */,
 				03E1D5761B6720CE009A55CA /* chakula 2.xcdatamodel */,
 				03ED3F071B658089000BAA38 /* chakula.xcdatamodel */,
 			);
-			currentVersion = 03ED3F071B658089000BAA38 /* chakula.xcdatamodel */;
+			currentVersion = 0378F51D1B772B7800420EAC /* chakula 3.xcdatamodel */;
 			path = chakula.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

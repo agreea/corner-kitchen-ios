@@ -20,7 +20,7 @@ class FoodFeedCell: UITableViewCell {
     override func setSelected(selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         foodItemLabel.backgroundColor = UIColor.whiteColor()
-        truckName.sizeToFit()
+        truckName.backgroundColor = UIColor(colorLiteralRed: 0.212, green: 0.212, blue: 0.212, alpha: 0.85)
     }
 
 }

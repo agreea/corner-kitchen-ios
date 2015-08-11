@@ -38,6 +38,7 @@ class OrderAPIController: APICallback {
     }
     
     func resultDidReturn(jsonResult: NSDictionary, method: String) {
+        print(jsonResult)
         delegate.orderDidSucceed()
     }
     

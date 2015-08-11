@@ -24,7 +24,8 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
     var userApi: UserAPIController!
     var userData: UserData?
     var refreshControl:UIRefreshControl!
-    
+    var mixpanel: Mixpanel!
+    var mixPanelProperties = [String : String]()
     var foodItems = [FoodItem]()
     var truckAddresses = [Int : String]()
     let kCellIdentifier: String = "foodCell"
@@ -33,12 +34,19 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
     var imgCache = [String:UIImage]()
     var labelColor = UIColor.whiteColor()
     let outputFormatter = NSDateFormatter()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        mixpanel = Mixpanel.sharedInstance()
         feedApi = FeedAPIController(delegate: self)
         userApi = UserAPIController()
         userData = userApi.getUserData()
+        if userData != nil {
+            mixPanelProperties[MixKeys.USER_ID] = "\(userData!.id!)"
+        } else {
+            mixPanelProperties[MixKeys.USER_ID] = "0"
+        }
+        print("View did load: \(mixpanel)")
         self.navigationItem.setHidesBackButton(true, animated:true)
         setupRefresh()
         locateUserAndFood()
@@ -70,6 +78,8 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
                 self.title = "Near \(address)"
             }
             feedApi.findFoodNear(currentCoords!)
+            mixpanel.track(MixKeys.EVENT.REFRESH, properties: mixPanelProperties)
+            print("mixpanel: \(mixpanel)")
         }
     }
     override func viewDidLayoutSubviews(){
@@ -115,7 +125,7 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
                     streetAddress = addressDict["Street"] as! String?{
                         callback(streetAddress)
                 } else {
-                    self.title = pm.name!
+                    callback(pm.name!)
                 }
             } else {
                 print("Problem with the data received from geocoder")
@@ -129,7 +139,7 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
     
     func refresh(sender:AnyObject) {
         if currentCoords != nil {
-            feedApi.findFoodNear(currentCoords!)
+            locateUserAndFood()
         } else {
             // TODO: Show location error
         }
@@ -143,6 +153,8 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
             self.foodItems = foodItems
             if(self.foodItems.count != 0) {
                 self.foodList!.reloadData()
+            } else {
+                self.setFeedMessage("Couldn't find any food nearby 😔")
             }
             self.buildAddresses()
             UIApplication.sharedApplication().networkActivityIndicatorVisible = false
@@ -168,6 +180,7 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
             UIApplication.sharedApplication().networkActivityIndicatorVisible = false
             self.setFeedMessage("No network connection :(")
             self.refreshControl.endRefreshing()
+            self.mixpanel.track(MixKeys.EVENT.REFRESH_FAIL, properties: self.mixPanelProperties)
         })
     }
     func queryFailedNoLocation(){
@@ -186,10 +199,7 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if (foodItems.count != 0) {
             foodList.separatorStyle = UITableViewCellSeparatorStyle.SingleLine;
-        } else {
-            setFeedMessage("Couldn't find any food nearby 😔")
         }
-        
         return foodItems.count
     }
 
@@ -197,6 +207,8 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
         let (cell, imgURL) = setUpCell(tableView, indexPath: indexPath)
         if let img = self.imgCache[imgURL] {
             cell.foodImage!.image = img
+        } else if imgURL == "" {
+            cell.foodImage!.image = UIImage(named: "no-pic-yet")
         } else if let url = NSURL(string: imgURL){
             let request = NSURLRequest(URL: url)
             let mainQueue = NSOperationQueue.mainQueue()
@@ -228,15 +240,10 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
         cell.foodPrice?.text = "$\(foodItem.price!)"
         cell.foodImage?.image = UIImage(named: "loading")
         cell.truckName?.text = foodItem.truck!.name
-        cell.truckName?.sizeToFit()
         if foodItem.truck!.dist < 0.1 {
             cell.distance?.text = "here!"
-            cell.distance?.textColor = UIColor.blackColor()
-            cell.distance?.sizeToFit()
         } else if let truckAddress = truckAddresses[foodItem.truck!.id] {
             cell.distance?.text = truckAddress
-            cell.distance?.textColor = UIColor.blackColor()
-            cell.distance?.sizeToFit()
         } else {
             let coord = CLLocationCoordinate2D(latitude: foodItem.truck!.lat, longitude: foodItem.truck!.lon)
             getAddressFor(coord){ address -> Void in
@@ -245,6 +252,7 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
                 cell.distance?.sizeToFit()
             }
         }
+        cell.distance?.textColor = UIColor.blackColor()
         let openString = outputFormatter.stringFromDate(foodItem.truck!.open)
         let closeString = outputFormatter.stringFromDate(foodItem.truck!.close)
         cell.pickupRange?.text = "\(openString) - \(closeString)"
@@ -265,7 +273,15 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
             let foodItemIndex = foodList!.indexPathForSelectedRow!.row
             orderController.foodItem = foodItems[foodItemIndex]
             print(userData!.sessionToken)
+            print(foodItems[foodItemIndex].id!)
             orderController.token = userData!.sessionToken!
+            var propCopy = mixPanelProperties
+            print(propCopy)
+            propCopy[MixKeys.FOOD_ID] = "\(foodItems[foodItemIndex].id!)"
+            // TODO: MIX PANEL IS NULL??
+            print(mixpanel.description)
+            mixpanel.track(MixKeys.EVENT.FEED_CLICK)
+            print("logged feed click")
         } else if let locationViewController = segue.destinationViewController as? LocationViewController {
             locationViewController.receivedLocation = currentCoords
         }

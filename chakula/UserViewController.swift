@@ -25,6 +25,8 @@ class UserViewController: UIViewController, UITextFieldDelegate, UserAPIProtocol
         LOGIN = "Login",
         VERIFY = "Verify",
         TO_FEED = "Back to Feed"
+    var mix: Mixpanel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         phoneNumberVerifyCode.delegate = self
@@ -39,6 +41,7 @@ class UserViewController: UIViewController, UITextFieldDelegate, UserAPIProtocol
         secondTitle.sizeToFit()
         print("titles not nil")
         userApi = UserAPIController(delegate: self)
+        mix = Mixpanel.sharedInstance()
         showRegisterInterface()
     }
     
@@ -97,8 +100,10 @@ class UserViewController: UIViewController, UITextFieldDelegate, UserAPIProtocol
         secondaryButton.userInteractionEnabled = true
         if didSucceed {
             showVerifyInterface(message)
+            mix.track(MixKeys.EVENT.REGISTER)
         } else {
             revealErrorBanner(message)
+            mix.track(MixKeys.EVENT.REG_FAIL)
         }
     }
     
@@ -111,7 +116,7 @@ class UserViewController: UIViewController, UITextFieldDelegate, UserAPIProtocol
     }
     func loginResult(message: String, didSucceed: Bool) {
         if didSucceed {
-            
+            showVerifyCompleteInterface()
         } else {
             revealErrorBanner(message)
         }
@@ -144,6 +149,7 @@ class UserViewController: UIViewController, UITextFieldDelegate, UserAPIProtocol
         phoneNumberVerifyCode.keyboardType = .Default
         secondTitle.text = "Please enter confirmation code we sent"
         primaryButton.setTitle(VERIFY, forState: .Normal)
+        mix.track(MixKeys.EVENT.REGISTER)
     }
     
     private func showVerifyCompleteInterface() {
@@ -157,6 +163,10 @@ class UserViewController: UIViewController, UITextFieldDelegate, UserAPIProtocol
         secondTitle.text = "Welcome to Chakula!"
         cancelButton.hidden = true
         backButton.hidden = true
+        var mixProps = [String : String]()
+        mixProps[MixKeys.USER_ID] = "\(userApi!.getUserData()!.id!)"
+        mix.registerSuperPropertiesOnce(mixProps)
+        mix.track(MixKeys.EVENT.VER_LOG, properties: mixProps)
     }
     
     private func showLoginInterface(){

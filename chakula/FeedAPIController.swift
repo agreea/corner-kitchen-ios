@@ -20,11 +20,17 @@ class FeedAPIController: APICallback {
     var trucks: Dictionary<Int, Truck>
     var foodItems: [FoodItem]
     var coord: CLLocationCoordinate2D?
+    var userId: Int
     
     init(delegate: FeedAPIProtocol) {
         self.trucks = Dictionary()
         self.foodItems = [FoodItem]()
         self.delegate = delegate
+        if let userData = UserAPIController().getUserData() {
+            userId = Int(userData.id!)
+        } else {
+            userId = -1
+        }
     }
     func findFoodNear(coord: CLLocationCoordinate2D){
         self.coord = coord
@@ -35,7 +41,7 @@ class FeedAPIController: APICallback {
     private func query(method: String){
         print("query called")
         let (fromTime, untilTime) = getTimeRange()
-        let postString = "lat=\(coord!.latitude)&lon=\(coord!.longitude)&radius=1000000&open_from=\(fromTime)&open_til=\(untilTime)"
+        let postString = "lat=\(coord!.latitude)&lon=\(coord!.longitude)&radius=0.6&open_from=\(fromTime)&open_til=\(untilTime)"
         print(postString)
         API().post(API.buildRequest(API.URL_TRUCK, method: method, postString: postString), callback: self, method: method)
     }
@@ -52,6 +58,8 @@ class FeedAPIController: APICallback {
                 query(API.METHOD_FINDFOOD)
             }
         }
+//        mixpanel.track("feed update", properties: [: userId]!)
+
     }
     
     func errorDidReturn(error: ErrorType, method: String) {
