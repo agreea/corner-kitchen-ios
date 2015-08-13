@@ -9,10 +9,10 @@
 import UIKit
 
 class OrderController: UIViewController, OrderRadioControllerProtocol {
-    var foodItem: FoodItem?
+    var foodItem: FoodItem!
     var quantity: Int = 1
     var nextViewOrigin = CGPoint(x: 0, y: 0)
-    var token: String?
+    var token: String!
     var unitTotal: Double = 0
     var radioControllers = [OrderRadioController]()
     var toggles = [OrderToggleOption]()
@@ -30,9 +30,10 @@ class OrderController: UIViewController, OrderRadioControllerProtocol {
     @IBOutlet weak var orderButton: UIButton!
     let mix = Mixpanel.sharedInstance()
     
-    required init?(coder aDecoder: NSCoder) {
+    required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         if foodItem != nil {
@@ -193,7 +194,7 @@ class OrderController: UIViewController, OrderRadioControllerProtocol {
             completeOrderController.totalPrice = self.totalPrice
             let userData = UserAPIController().getUserData()
             var mixProps = [String : String]()
-            mixProps[MixKeys.USER_ID] = "\(userData!.id!)"
+//            mixProps[MixKeys.USER_ID] = "\(userData!.id)"
             mixProps[MixKeys.FOOD_ID] = "\(foodItem!.id!)"
             mix.track(MixKeys.EVENT.COMPLETE_ORDER, properties: mixProps)
         }

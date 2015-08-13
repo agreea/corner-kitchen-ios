@@ -151,9 +151,9 @@ class OrderCompleteController: UIViewController, OrderAPIProtocol {
                 print("Reverse geocoder failed with error" + error!.localizedDescription)
                 return
             }
-            if placemarks!.count > 0 {
+            if placemarks!.count > 0,
+                let pm = placemarks![0] as? CLPlacemark {
                 print("got to placemarks")
-                let pm = placemarks![0] as CLPlacemark
                 if let addressDict = pm.addressDictionary as Dictionary?,
                     streetAddress = addressDict["Street"] as! String?{
                         self.location = streetAddress
@@ -203,8 +203,8 @@ class OrderCompleteController: UIViewController, OrderAPIProtocol {
     func orderDidSucceed() {
         // start segue to orderComplete
         var mixProps = [String : String]()
-        mixProps[MixKeys.USER_ID] = "\(UserAPIController().getUserData()!.id!)"
-        mixProps[MixKeys.FOOD_ID] = "\(order!.foodItem!.id!)"
+        mixProps[MixKeys.USER_ID] = "\(UserAPIController().getUserData()!.id)"
+        mixProps[MixKeys.FOOD_ID] = "\(order!.foodItem!.id)"
         Mixpanel.sharedInstance().track(MixKeys.EVENT.ORDER_PLACE, properties: mixProps)
         performSegueWithIdentifier("orderComplete", sender: nil)
     }

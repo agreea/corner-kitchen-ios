@@ -100,8 +100,8 @@ class LocationViewController: UIViewController, MKMapViewDelegate {
                 print("Reverse geocoder failed with error" + error!.localizedDescription)
                 return
             }
-            if placemarks!.count > 0 {
-                let pm = placemarks![0] as CLPlacemark
+            if placemarks!.count > 0,
+                let pm = placemarks![0] as? CLPlacemark {
                 if let addressDict = pm.addressDictionary as Dictionary?,
                         streetAddress = addressDict["Street"] as! String?{
                         self.currentAddress = streetAddress

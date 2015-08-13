@@ -10,7 +10,7 @@ import Foundation
 
 protocol APICallback {
     func resultDidReturn(result: NSDictionary, method: String)
-    func errorDidReturn(error: ErrorType, method: String)
+    func errorDidReturn(error: NSError, method: String)
 }
 class API: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate {
     static let URL = "https://yaychakula.com/api/",
@@ -42,29 +42,30 @@ class API: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate {
     
     
     func post(request: NSMutableURLRequest!, callback: APICallback, method: String) {
-            let task = API.newSession().dataTaskWithRequest(request){
-                data, response, error in
-                if error != nil {
-                    callback.errorDidReturn(error!, method: method)
-                    return
-                }
-                do {
-                    if let jsonResult =  try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as? NSDictionary {
-                        print("calling callback")
-                        callback.resultDidReturn(jsonResult, method: method)
-                    }
-                } catch { // TODO: catch error
-                    callback.errorDidReturn(error, method: method)
-                }
+        let task = API.newSession().dataTaskWithRequest(request){
+            data, response, error in
+            if error != nil {
+                callback.errorDidReturn(error!, method: method)
+                return
             }
-            task!.resume()
+            var err: NSError?
+            if let jsonResult = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &err) as? NSDictionary {
+                if err != nil {
+                    callback.errorDidReturn(error!, method: method)
+                }
+                print("calling callback")
+                callback.resultDidReturn(jsonResult, method: method)
+            }
+        }
+        task.resume()
     }
     
     func URLSession(session: NSURLSession,
-        task: NSURLSessionTask,
-        didReceiveChallenge challenge: NSURLAuthenticationChallenge,
-        completionHandler: (NSURLSessionAuthChallengeDisposition,
-        NSURLCredential?) -> Void) {
+        didReceiveChallenge challenge:
+        NSURLAuthenticationChallenge,
+        completionHandler:
+        (NSURLSessionAuthChallengeDisposition,
+        NSURLCredential!) -> Void) {
             completionHandler(
                 NSURLSessionAuthChallengeDisposition.UseCredential,
                 NSURLCredential(forTrust:
@@ -73,11 +74,11 @@ class API: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate {
     
     func URLSession(session: NSURLSession,
         task: NSURLSessionTask,
-        willPerformHTTPRedirection response: NSHTTPURLResponse,
+        willPerformHTTPRedirection response:
+        NSHTTPURLResponse,
         newRequest request: NSURLRequest,
-        completionHandler: (NSURLRequest?) -> Void) {
+        completionHandler: (NSURLRequest!) -> Void) {
             let newRequest : NSURLRequest? = request
-//            print(newRequest?.description)
             completionHandler(newRequest)
     }
 
@@ -89,9 +90,11 @@ class API: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate {
                     Phone = "Phone"
         
     }
+    
     struct TRUCK {
         static let ID = "Truck_id"
     }
+    
     struct MENU_ITEM {
         static let  MENU_ID = "Id",
                     ORDER_ID = "item_id",

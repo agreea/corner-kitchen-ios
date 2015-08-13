@@ -20,7 +20,7 @@ class UserViewController: UIViewController, UITextFieldDelegate, UserAPIProtocol
         @IBOutlet weak var secondTitle: UILabel!
     @IBOutlet weak var cancelButton: UIButton!
     
-    var userApi: UserAPIController?
+    var userApi: UserAPIController!
     let REGISTER = "Register",
         LOGIN = "Login",
         VERIFY = "Verify",
@@ -79,17 +79,17 @@ class UserViewController: UIViewController, UITextFieldDelegate, UserAPIProtocol
         }
     }
     private func attemptRegister() {
-        if phoneNumberVerifyCode.text!.characters.count != 10 {
+        if count(phoneNumberVerifyCode.text!) != 10 {
             revealErrorBanner("We need a 10-digit phone number!")
-        } else if password.text?.characters.count < 4 {
+        } else if count(password.text!) < 4 {
             revealErrorBanner("Please enter a longer password")
-        } else if firstName.text!.characters.count < 2 {
+        } else if count(firstName.text!) < 2 {
             revealErrorBanner("Please enter your full first name")
-        } else if lastName.text!.characters.count < 2 {
+        } else if count(lastName.text!) < 2 {
             revealErrorBanner("Please enter your full last name")
         } else {
             print("registering...")
-            userApi!.register(Int(phoneNumberVerifyCode.text!)!, pass: password.text!, first: firstName.text!, last: lastName.text!)
+            userApi!.register(phoneNumberVerifyCode.text!.toInt()!, pass: password.text!, first: firstName.text!, last: lastName.text!)
             showRegisterInProgress()
         }
     }
@@ -164,7 +164,7 @@ class UserViewController: UIViewController, UITextFieldDelegate, UserAPIProtocol
         cancelButton.hidden = true
         backButton.hidden = true
         var mixProps = [String : String]()
-        mixProps[MixKeys.USER_ID] = "\(userApi!.getUserData()!.id!)"
+        mixProps[MixKeys.USER_ID] = "\(userApi!.getUserData()!.id)"
         mix.registerSuperPropertiesOnce(mixProps)
         mix.track(MixKeys.EVENT.VER_LOG, properties: mixProps)
     }

@@ -27,14 +27,10 @@ class OrderAPIController: APICallback {
                                             toggleOptions: toggleOptions, radioOptions: radioOptions,
                                             quantity: quantity)
         print("itemData: \(itemDictionary)")
-        do {
-            let jsonData = try NSJSONSerialization.dataWithJSONObject(itemDictionary, options: NSJSONWritingOptions(rawValue: 0))
-            let jsonText = NSString(data: jsonData, encoding: NSASCIIStringEncoding)
-            let postString = "session=\(token)&truck_id=\(foodItem.truck!.id)&method=order&pickup_time=\(pickupTime)&items=[\(jsonText!)]"
-            API().post(API.buildRequest(API.URL_TRUCK, method: API.METHOD_ORDER, postString: postString), callback: self, method: API.METHOD_ORDER)
-        } catch {
-            print("Not even in handler")
-        }
+        let jsonData = NSJSONSerialization.dataWithJSONObject(itemDictionary, options: NSJSONWritingOptions(rawValue: 0), error: nil)
+        let jsonText = NSString(data: jsonData!, encoding: NSASCIIStringEncoding)
+        let postString = "session=\(token)&truck_id=\(foodItem.truck!.id)&method=order&pickup_time=\(pickupTime)&items=[\(jsonText!)]"
+        API().post(API.buildRequest(API.URL_TRUCK, method: API.METHOD_ORDER, postString: postString), callback: self, method: API.METHOD_ORDER)
     }
     
     func resultDidReturn(jsonResult: NSDictionary, method: String) {
@@ -42,7 +38,7 @@ class OrderAPIController: APICallback {
         delegate.orderDidSucceed()
     }
     
-    func errorDidReturn(error: ErrorType, method: String) {
+    func errorDidReturn(error: NSError, method: String) {
         delegate.orderDidFail()
     }
 

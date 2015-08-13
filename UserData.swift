@@ -1,16 +1,22 @@
 //
 //  UserData.swift
-//  chakula
+//  
 //
-//  Created by Agree Ahmed on 7/27/15.
-//  Copyright © 2015 org.rhye. All rights reserved.
+//  Created by Agree Ahmed on 8/11/15.
+//
 //
 
 import Foundation
 import CoreData
 
 class UserData: NSManagedObject {
-    class func newEntry(managedObjectContext: NSManagedObjectContext, firstName: String, lastName: String, sessionToken: String, id: Int) -> UserData{
+
+    @NSManaged var firstName: String
+    @NSManaged var id: NSNumber
+    @NSManaged var lastName: String
+    @NSManaged var sessionToken: String
+    
+    class func newEntry(managedObjectContext: NSManagedObjectContext, firstName: String, lastName: String, sessionToken: String, id: Int) -> UserData {
         let newItem = NSEntityDescription.insertNewObjectForEntityForName("UserData", inManagedObjectContext: managedObjectContext) as! UserData
         newItem.firstName = firstName
         newItem.lastName = lastName
@@ -19,11 +25,10 @@ class UserData: NSManagedObject {
         return newItem
     }
     class func save(managedObjectContext: NSManagedObjectContext){
-        do {
-            try managedObjectContext.save()
-        } catch {
-            NSLog("Unresolved error: \(error)")
-            abort()
+        var error : NSError?
+        if(managedObjectContext.save(&error) ) {
+            println(error?.localizedDescription)
         }
     }
+
 }

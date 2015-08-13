@@ -27,7 +27,7 @@ class FeedAPIController: APICallback {
         self.foodItems = [FoodItem]()
         self.delegate = delegate
         if let userData = UserAPIController().getUserData() {
-            userId = Int(userData.id!)
+            userId = Int(userData.id)
         } else {
             userId = -1
         }
@@ -62,8 +62,9 @@ class FeedAPIController: APICallback {
 
     }
     
-    func errorDidReturn(error: ErrorType, method: String) {
+    func errorDidReturn(error: NSError, method: String) {
         //
+        print(error)
     }
     /*
     ============ TRUCK SERVLET ============

@@ -19,10 +19,9 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
         if you don't have the last known location, show an error message (?)
     */
     var manager: CLLocationManager!
-    var currentCoords: CLLocationCoordinate2D?
+    var currentCoords: CLLocationCoordinate2D!
     // Registration and Login interface components
-    var userApi: UserAPIController!
-    var userData: UserData?
+    var userData: UserData!
     var refreshControl:UIRefreshControl!
     var mixpanel: Mixpanel!
     var mixPanelProperties = [String : String]()
@@ -39,10 +38,9 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
         super.viewDidLoad()
         mixpanel = Mixpanel.sharedInstance()
         feedApi = FeedAPIController(delegate: self)
-        userApi = UserAPIController()
-        userData = userApi.getUserData()
+        userData = UserAPIController().getUserData()
         if userData != nil {
-            mixPanelProperties[MixKeys.USER_ID] = "\(userData!.id!)"
+            mixPanelProperties[MixKeys.USER_ID] = "\(userData.id)"
         } else {
             mixPanelProperties[MixKeys.USER_ID] = "0"
         }
@@ -63,11 +61,12 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
     
     private func locateUserAndFood(){
         manager = CLLocationManager()
-        if #available(iOS 8.0, *) {
-            manager.requestWhenInUseAuthorization()
-        } else {
-            // Fallback on earlier versions
-        }
+        manager.requestWhenInUseAuthorization()
+//        if #available(iOS 8.0, *) {
+//            manager.requestWhenInUseAuthorization()
+//        } else {
+//            // Fallback on earlier versions
+//        }
         manager.delegate = self
         manager.desiredAccuracy = kCLLocationAccuracyBest
         if currentCoords == nil {
@@ -96,9 +95,9 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
 //        }
     }
     
-    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]){
+    func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
         print("got a location")
-        if let location = locations.last {
+        if let location = locations.last as? CLLocation {
             print("location was last")
             currentCoords = location.coordinate
             print("Coords have been set")
@@ -118,9 +117,9 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
                 print("Reverse geocoder failed with error" + error!.localizedDescription)
                 return
             }
-            if placemarks!.count > 0 {
+            if placemarks!.count > 0,
+                let pm = placemarks![0] as? CLPlacemark {
                 print("got to placemarks")
-                let pm = placemarks![0] as CLPlacemark
                 if let addressDict = pm.addressDictionary as Dictionary?,
                     streetAddress = addressDict["Street"] as! String?{
                         callback(streetAddress)
@@ -258,8 +257,8 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
         cell.pickupRange?.text = "\(openString) - \(closeString)"
         return (cell, foodItem.imgURL!)
     }
-    
-    override func shouldPerformSegueWithIdentifier(identifier: String, sender: AnyObject?) -> Bool{
+
+    override func shouldPerformSegueWithIdentifier(identifier: String?, sender: AnyObject?) -> Bool{
         if identifier == "toOrder" && userData == nil {
             performSegueWithIdentifier("toRegisterLogin", sender: sender)
             return false
@@ -270,15 +269,14 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         print("Segue coming!")
         if let orderController = segue.destinationViewController as? OrderController {
-            let foodItemIndex = foodList!.indexPathForSelectedRow!.row
+            let foodItemIndex = foodList!.indexPathForSelectedRow()!.row
             orderController.foodItem = foodItems[foodItemIndex]
             print(userData!.sessionToken)
             print(foodItems[foodItemIndex].id!)
-            orderController.token = userData!.sessionToken!
+            orderController.token = userData!.sessionToken
             var propCopy = mixPanelProperties
             print(propCopy)
             propCopy[MixKeys.FOOD_ID] = "\(foodItems[foodItemIndex].id!)"
-            // TODO: MIX PANEL IS NULL??
             print(mixpanel.description)
             mixpanel.track(MixKeys.EVENT.FEED_CLICK)
             print("logged feed click")

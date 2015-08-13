@@ -18,12 +18,12 @@ protocol UserAPIProtocol {
 
 
 class UserAPIController: APICallback{
-    var phone: Int?
-    var firstName: String?
-    var lastName: String?
-    var password: String?
-    var sessionToken: String?
-    var delegate: UserAPIProtocol?
+    var phone: Int!
+    var firstName: String!
+    var lastName: String!
+    var password: String!
+    var sessionToken: String!
+    var delegate: UserAPIProtocol!
     let managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext
     let mixpanel = Mixpanel.sharedInstance()
 
@@ -50,7 +50,7 @@ class UserAPIController: APICallback{
         }
     }
     
-    func errorDidReturn(error: ErrorType, method: String){
+    func errorDidReturn(error: NSError, method: String){
         delegate?.callDidFail("\(error)")
     }
 
@@ -109,23 +109,19 @@ class UserAPIController: APICallback{
     }
     
     private func writeUserEntity(firstName: String, lastName: String, sessionToken: String, id: Int) {
-        UserData.newEntry(managedObjectContext,
+        UserData.newEntry(managedObjectContext!,
             firstName: firstName, lastName: lastName,
             sessionToken: sessionToken, id: id)
-        UserData.save(managedObjectContext)
+        UserData.save(managedObjectContext!)
         delegate?.verifyResult("Success!", didSucceed: true)
     }
     
     func getUserData() -> UserData? {
         let request = NSFetchRequest(entityName: "UserData")
-        do {
-            let fetchedEntities = try managedObjectContext.executeFetchRequest(request) as! [UserData]
-            if fetchedEntities.count != 0 {
+        if let fetchedEntities = managedObjectContext!.executeFetchRequest(request, error: nil) as? [UserData]
+            where fetchedEntities.count != 0 {
                 print(fetchedEntities[0])
                 return fetchedEntities[0]
-            }
-        } catch {
-            print(error)
         }
         return nil
     }

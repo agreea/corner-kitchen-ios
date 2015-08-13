@@ -36,7 +36,6 @@
 		03BD586E1B5F043800110205 /* checked.png in Resources */ = {isa = PBXBuildFile; fileRef = 03BD586C1B5F043800110205 /* checked.png */; };
 		03BD586F1B5F043800110205 /* unchecked.png in Resources */ = {isa = PBXBuildFile; fileRef = 03BD586D1B5F043800110205 /* unchecked.png */; };
 		03BD58711B5F079C00110205 /* CheckBoxLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BD58701B5F079C00110205 /* CheckBoxLabel.swift */; };
-		03E1D5741B66F890009A55CA /* UserData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E1D5721B66F890009A55CA /* UserData+CoreDataProperties.swift */; };
 		03E1D5751B66F890009A55CA /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E1D5731B66F890009A55CA /* UserData.swift */; };
 		03E52F691B71CE1900B60826 /* UserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E52F681B71CE1800B60826 /* UserViewController.swift */; };
 		03EAE4AE1B689A250004E81E /* NSDateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03EAE4AD1B689A250004E81E /* NSDateExtension.swift */; };
@@ -96,7 +95,6 @@
 		03BD586C1B5F043800110205 /* checked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checked.png; sourceTree = "<group>"; };
 		03BD586D1B5F043800110205 /* unchecked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = unchecked.png; sourceTree = "<group>"; };
 		03BD58701B5F079C00110205 /* CheckBoxLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckBoxLabel.swift; sourceTree = "<group>"; };
-		03E1D5721B66F890009A55CA /* UserData+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UserData+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		03E1D5731B66F890009A55CA /* UserData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
 		03E1D5761B6720CE009A55CA /* chakula 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "chakula 2.xcdatamodel"; sourceTree = "<group>"; };
 		03E52F681B71CE1800B60826 /* UserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserViewController.swift; sourceTree = "<group>"; };
@@ -137,7 +135,6 @@
 			children = (
 				0378F5261B79758500420EAC /* launch_screen.png */,
 				0378F51C1B77141600420EAC /* Mixpanel-Bridging-Header.h */,
-				03E1D5721B66F890009A55CA /* UserData+CoreDataProperties.swift */,
 				03E1D5731B66F890009A55CA /* UserData.swift */,
 				038A6CA51B521889004A0034 /* chakula */,
 				038A6CBB1B521889004A0034 /* chakulaTests */,
@@ -440,7 +437,6 @@
 				03BD58711B5F079C00110205 /* CheckBoxLabel.swift in Sources */,
 				038A6CCD1B53992E004A0034 /* foodItem.swift in Sources */,
 				0315D7A91B5CB53500656F85 /* RadioOption.swift in Sources */,
-				03E1D5741B66F890009A55CA /* UserData+CoreDataProperties.swift in Sources */,
 				03BD586B1B5DD5EE00110205 /* SSRadioButtonController.swift in Sources */,
 				03A04B101B63FF5900D947CF /* UserAPIController.swift in Sources */,
 				0378F51F1B773BBB00420EAC /* MixKeys.swift in Sources */,

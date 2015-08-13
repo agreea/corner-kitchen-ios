@@ -22,7 +22,7 @@ class SSRadioButton: UIButton {
     /**
     Color of the radio button circle. Default value is UIColor red.
     */
-    @IBInspectable var circleColor: UIColor = UIColor(colorLiteralRed: 0.095, green: 0.6, blue: 1, alpha: 1) {
+    @IBInspectable var circleColor: UIColor = UIColor(red: 0.095, green: 0.6, blue: 1, alpha: 1) {
         didSet {
             circleLayer.strokeColor = circleColor.CGColor
             self.toggleButon()
@@ -49,7 +49,7 @@ class SSRadioButton: UIButton {
         return circleFrame
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         initialize()
     }
