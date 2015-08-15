@@ -27,6 +27,7 @@
 		038A6CD31B54E2E4004A0034 /* FoodFeedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038A6CD21B54E2E4004A0034 /* FoodFeedCell.swift */; };
 		03A04B101B63FF5900D947CF /* UserAPIController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03A04B0F1B63FF5800D947CF /* UserAPIController.swift */; };
 		03A04B121B64008500D947CF /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03A04B111B64008500D947CF /* API.swift */; };
+		03ACFEC51B7FA16000E56B17 /* CLLocationManagerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03ACFEC41B7FA16000E56B17 /* CLLocationManagerExtension.swift */; };
 		03BC44AE1B75C192007D66F1 /* LocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BC44AD1B75C192007D66F1 /* LocationViewController.swift */; };
 		03BC44B01B75CDDB007D66F1 /* chakula-map-marker.png in Resources */ = {isa = PBXBuildFile; fileRef = 03BC44AF1B75CDDB007D66F1 /* chakula-map-marker.png */; };
 		03BC44B21B768559007D66F1 /* to-location.png in Resources */ = {isa = PBXBuildFile; fileRef = 03BC44B11B768559007D66F1 /* to-location.png */; };
@@ -86,6 +87,7 @@
 		038A6CD21B54E2E4004A0034 /* FoodFeedCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoodFeedCell.swift; sourceTree = "<group>"; };
 		03A04B0F1B63FF5800D947CF /* UserAPIController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserAPIController.swift; sourceTree = "<group>"; };
 		03A04B111B64008500D947CF /* API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
+		03ACFEC41B7FA16000E56B17 /* CLLocationManagerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CLLocationManagerExtension.swift; sourceTree = "<group>"; };
 		03BC44AD1B75C192007D66F1 /* LocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationViewController.swift; sourceTree = "<group>"; };
 		03BC44AF1B75CDDB007D66F1 /* chakula-map-marker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chakula-map-marker.png"; sourceTree = "<group>"; };
 		03BC44B11B768559007D66F1 /* to-location.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "to-location.png"; sourceTree = "<group>"; };
@@ -167,6 +169,7 @@
 				038A6CA61B521889004A0034 /* Supporting Files */,
 				03EAE4AD1B689A250004E81E /* NSDateExtension.swift */,
 				038A6CA81B521889004A0034 /* AppDelegate.swift */,
+				03ACFEC41B7FA16000E56B17 /* CLLocationManagerExtension.swift */,
 			);
 			path = chakula;
 			sourceTree = "<group>";
@@ -427,6 +430,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				03ACFEC51B7FA16000E56B17 /* CLLocationManagerExtension.swift in Sources */,
 				038A6CAB1B521889004A0034 /* FoodFeedController.swift in Sources */,
 				03EAE4B01B689E630004E81E /* OrderAPIController.swift in Sources */,
 				038A6CCF1B548237004A0034 /* truck.swift in Sources */,

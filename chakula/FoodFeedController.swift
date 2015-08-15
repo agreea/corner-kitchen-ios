@@ -19,7 +19,7 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
         if you don't have the last known location, show an error message (?)
     */
     var manager: CLLocationManager!
-    var currentCoords: CLLocationCoordinate2D!
+    var currentLocation: CLLocation!
     // Registration and Login interface components
     var userData: UserData!
     var refreshControl:UIRefreshControl!
@@ -44,11 +44,18 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
         } else {
             mixPanelProperties[MixKeys.USER_ID] = "0"
         }
-        print("View did load: \(mixpanel)")
         self.navigationItem.setHidesBackButton(true, animated:true)
         setupRefresh()
-        locateUserAndFood()
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        println("Set up refresh")
+        switch CLLocationManager.authorizationStatus() {
+        case CLAuthorizationStatus.AuthorizedAlways,
+                CLAuthorizationStatus.AuthorizedWhenInUse:
+            locateUserAndFood()
+            break
+        default:
+            CLLocationManager.launchLocationDisabledAlert()
+            break
+        }
     }
     
     private func setupRefresh() {
@@ -62,23 +69,19 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
     private func locateUserAndFood(){
         manager = CLLocationManager()
         manager.requestWhenInUseAuthorization()
-//        if #available(iOS 8.0, *) {
-//            manager.requestWhenInUseAuthorization()
-//        } else {
-//            // Fallback on earlier versions
-//        }
         manager.delegate = self
         manager.desiredAccuracy = kCLLocationAccuracyBest
-        if currentCoords == nil {
+        if currentLocation == nil ||
+            currentLocation.timestamp.timeIntervalSinceDate(NSDate()) > 3600 {
             manager.startUpdatingLocation()
             print("updating location now")
         } else {
-            getAddressFor(currentCoords!){ address -> Void in
+            CLLocationManager.getAddressFor(currentLocation.coordinate){ address -> Void in
                 self.title = "Near \(address)"
             }
-            feedApi.findFoodNear(currentCoords!)
+            UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+            feedApi.findFoodNear(currentLocation.coordinate)
             mixpanel.track(MixKeys.EVENT.REFRESH, properties: mixPanelProperties)
-            print("mixpanel: \(mixpanel)")
         }
     }
     override func viewDidLayoutSubviews(){
@@ -98,49 +101,24 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
     func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
         print("got a location")
         if let location = locations.last as? CLLocation {
-            print("location was last")
-            currentCoords = location.coordinate
-            print("Coords have been set")
-            feedApi.findFoodNear(currentCoords!)
-            print("Called Feed Api")
+            currentLocation = location
+            feedApi.findFoodNear(currentLocation.coordinate)
             manager.stopUpdatingLocation()
-            getAddressFor(currentCoords!){ address -> Void in
+            CLLocationManager.getAddressFor(currentLocation.coordinate){ address -> Void in
                 self.title = "Near \(address)"
             }
         }
     }
     
-    func getAddressFor(coord: CLLocationCoordinate2D, callback: (String) -> Void) {
-        let location = CLLocation(latitude: coord.latitude, longitude: coord.longitude)
-        CLGeocoder().reverseGeocodeLocation(location, completionHandler: {(placemarks, error) -> Void in
-            if error != nil {
-                print("Reverse geocoder failed with error" + error!.localizedDescription)
-                return
-            }
-            if placemarks!.count > 0,
-                let pm = placemarks![0] as? CLPlacemark {
-                print("got to placemarks")
-                if let addressDict = pm.addressDictionary as Dictionary?,
-                    streetAddress = addressDict["Street"] as! String?{
-                        callback(streetAddress)
-                } else {
-                    callback(pm.name!)
-                }
-            } else {
-                print("Problem with the data received from geocoder")
-            }
-        })
-    }
-
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
     
     }
     
     func refresh(sender:AnyObject) {
-        if currentCoords != nil {
+        if currentLocation != nil {
             locateUserAndFood()
         } else {
-            // TODO: Show location error
+            CLLocationManager.launchLocationUndeterminedAlert()
         }
     }
     
@@ -167,7 +145,7 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
             let truck = foodItem.truck
             if truckAddresses[truck!.id] == nil {
                 let truckCoord = CLLocationCoordinate2D(latitude: truck!.lat, longitude: truck!.lon)
-                getAddressFor(truckCoord){ address -> Void in
+                CLLocationManager.getAddressFor(truckCoord){ address -> Void in
                     self.truckAddresses[truck!.id] = address
                 }
             }
@@ -203,61 +181,22 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let (cell, imgURL) = setUpCell(tableView, indexPath: indexPath)
+        let cell: FoodFeedCell = tableView.dequeueReusableCellWithIdentifier(kCellIdentifier) as! FoodFeedCell
+        let foodItem = self.foodItems[indexPath.row]
+        let imgURL = foodItem.imgURL!
+        cell.setupCell(foodItem, truckAddress: truckAddresses[foodItem.truck!.id],
+            outputFormatter: outputFormatter)
         if let img = self.imgCache[imgURL] {
             cell.foodImage!.image = img
         } else if imgURL == "" {
             cell.foodImage!.image = UIImage(named: "no-pic-yet")
         } else if let url = NSURL(string: imgURL){
-            let request = NSURLRequest(URL: url)
-            let mainQueue = NSOperationQueue.mainQueue()
-            NSURLConnection.sendAsynchronousRequest(request, queue: mainQueue, completionHandler: { (response, data, error) -> Void in
-                if error == nil {
-                    let toImage = UIImage(data: data!)
-                    self.imgCache[imgURL] = toImage
-                    dispatch_async(dispatch_get_main_queue(), {
-                        if let cellToUpdate = tableView.cellForRowAtIndexPath(indexPath) as? FoodFeedCell {
-                            UIView.transitionWithView(cellToUpdate.foodImage!,
-                                duration:0.7,
-                                options: UIViewAnimationOptions.TransitionCrossDissolve,
-                                animations: { cellToUpdate.foodImage!.image = toImage },
-                                completion: nil)
-                            }
-                        })
-                    } else {
-                        print("Error: \(error!.localizedDescription)")
-                    }
-                })
-            }
+            cell.getImage(url) { image -> Void in
+                self.imgCache[imgURL] = image }
+        }
         return cell
     }
     
-    private func setUpCell(tableView: UITableView, indexPath: NSIndexPath) -> (FoodFeedCell, String) {
-        let cell: FoodFeedCell = tableView.dequeueReusableCellWithIdentifier(kCellIdentifier) as! FoodFeedCell
-        let foodItem = self.foodItems[indexPath.row]
-        cell.foodTitle?.text = foodItem.name!
-        cell.foodPrice?.text = "$\(foodItem.price!)"
-        cell.foodImage?.image = UIImage(named: "loading")
-        cell.truckName?.text = foodItem.truck!.name
-        if foodItem.truck!.dist < 0.1 {
-            cell.distance?.text = "here!"
-        } else if let truckAddress = truckAddresses[foodItem.truck!.id] {
-            cell.distance?.text = truckAddress
-        } else {
-            let coord = CLLocationCoordinate2D(latitude: foodItem.truck!.lat, longitude: foodItem.truck!.lon)
-            getAddressFor(coord){ address -> Void in
-                cell.distance?.text = address
-                cell.distance?.textColor = UIColor.blackColor()
-                cell.distance?.sizeToFit()
-            }
-        }
-        cell.distance?.textColor = UIColor.blackColor()
-        let openString = outputFormatter.stringFromDate(foodItem.truck!.open)
-        let closeString = outputFormatter.stringFromDate(foodItem.truck!.close)
-        cell.pickupRange?.text = "\(openString) - \(closeString)"
-        return (cell, foodItem.imgURL!)
-    }
-
     override func shouldPerformSegueWithIdentifier(identifier: String?, sender: AnyObject?) -> Bool{
         if identifier == "toOrder" && userData == nil {
             performSegueWithIdentifier("toRegisterLogin", sender: sender)
@@ -271,17 +210,12 @@ class FoodFeedController: UIViewController, UITableViewDataSource, UITableViewDe
         if let orderController = segue.destinationViewController as? OrderController {
             let foodItemIndex = foodList!.indexPathForSelectedRow()!.row
             orderController.foodItem = foodItems[foodItemIndex]
-            print(userData!.sessionToken)
-            print(foodItems[foodItemIndex].id!)
             orderController.token = userData!.sessionToken
             var propCopy = mixPanelProperties
-            print(propCopy)
             propCopy[MixKeys.FOOD_ID] = "\(foodItems[foodItemIndex].id!)"
-            print(mixpanel.description)
             mixpanel.track(MixKeys.EVENT.FEED_CLICK)
-            print("logged feed click")
         } else if let locationViewController = segue.destinationViewController as? LocationViewController {
-            locationViewController.receivedLocation = currentCoords
+            locationViewController.receivedLocation = currentLocation.coordinate
         }
     }
 }

@@ -62,6 +62,7 @@ class OrderCompleteController: UIViewController, OrderAPIProtocol {
         }
         set {
             locationLabel.text! = newValue
+            locationLabel.textColor = UIColor.blackColor()
         }
     }
 

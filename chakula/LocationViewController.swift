@@ -118,7 +118,8 @@ class LocationViewController: UIViewController, MKMapViewDelegate {
         print("Segue coming!")
         // set the location to the one on my screen
         if let feed = segue.destinationViewController as? FoodFeedController {
-            feed.currentCoords = mapView.centerCoordinate
+            let location = CLLocation(latitude: mapView.centerCoordinate.latitude, longitude: mapView.centerCoordinate.longitude)
+            feed.currentLocation = location
         }
     }
 }

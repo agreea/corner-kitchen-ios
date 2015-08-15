@@ -58,8 +58,6 @@ class FeedAPIController: APICallback {
                 query(API.METHOD_FINDFOOD)
             }
         }
-//        mixpanel.track("feed update", properties: [: userId]!)
-
     }
     
     func errorDidReturn(error: NSError, method: String) {
